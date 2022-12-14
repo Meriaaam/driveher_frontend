@@ -10,7 +10,6 @@ export default function Header({ navigation }) {
 
   const handleLogout = () => {
     dispatch(logout());
-    console.log(navigation);
     navigation.navigate("Signin");
   };
 
@@ -35,9 +34,9 @@ const styles = StyleSheet.create({
     height: "15%",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
     backgroundColor: "#73DDAA",
-    padding: 30,
+    padding: 20,
   },
   welcomeText: {
     fontSize: 30,
