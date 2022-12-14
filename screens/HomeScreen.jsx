@@ -12,7 +12,7 @@ export default function HomeScreen({navigation}) {
           <Text style={styles.homeText}>
             Pour un déplacement en toute sécurité 😉
           </Text>
-          <TouchableOpacity style={styles.startBtn} onPress={ () => navigation.navigate('TabNavigator',{screen:'Accueil'})} >
+          <TouchableOpacity style={styles.startBtn} onPress={ () => navigation.navigate('Signin')} >
             <Text style={styles.btnText} >Commencer </Text><FontAwesome name='arrow-right' size={20} color='#fff' />
           </TouchableOpacity>
         </View>

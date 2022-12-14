@@ -23,6 +23,7 @@ import user from './reducers/user';
 import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SigninScreen from './screens/SigninScreen';
 
 
 // ________________STORE CONFIGURATION_________________________
@@ -80,6 +81,7 @@ export default function App() {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Order" component={OrderResumeScreen} />
+            <Stack.Screen name="Signin" component={SigninScreen} />
             <Stack.Screen name="Rating" component={RatingScreen} />
             <Stack.Screen name="Driver" component={YourDriverScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
