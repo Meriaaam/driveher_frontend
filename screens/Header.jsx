@@ -10,8 +10,7 @@ export default function Header({ navigation }) {
 
   const handleLogout = () => {
     dispatch(logout());
-    console.log(navigation);
-    navigation.navigate('Signin');
+    navigation.navigate("Signin");
   };
 
   return (
@@ -31,13 +30,13 @@ export default function Header({ navigation }) {
 
 const styles = StyleSheet.create({
   logoContainer: {
-    width: '100%',
-    height: '15%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#73DDAA',
-    padding: 30,
+    width: "100%",
+    height: "15%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    backgroundColor: "#73DDAA",
+    padding: 20,
   },
   welcomeText: {
     fontSize: 30,
