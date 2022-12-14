@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: { 
-    token: null, 
+  value: {
+    token: null,
     firstname: null,
-    orders:[] 
-},
+    orders: [],
+    departure: {},
+    arrival: {},
+  },
 };
 
 export const userSlice = createSlice({
@@ -21,10 +23,21 @@ export const userSlice = createSlice({
       state.value.firstname = null;
     },
     addOrder: (state, action) => {
-        state.value.orders.push(action.payload)
+      state.value.orders.push(action.payload);
+    },
+    addItinery: (state, action) => {
+      console.log('action-itinery', action.payload);
+      state.value.departure = action.payload.departure;
+      state.value.arrival = action.payload.arrival;
+    },
+    removeItinery: (state) => {
+      state.value.departure = {};
+      state.value.arrival = {};
+      console.log('removeData', state.value.departure, state.value.arrival);
     },
   },
 });
 
-export const { login, logout, addOrder } = userSlice.actions;
+export const { login, logout, addOrder, addItinery, removeItinery } =
+  userSlice.actions;
 export default userSlice.reducer;
