@@ -1,9 +1,6 @@
 import { useState } from "react";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-//import { Octicons, Ionicons } from "@expo/vector-icons";
 import {
   Button,
-  Image,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -15,47 +12,59 @@ import {
 import Header from "./Header";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "../reducers/user";
+import user from "../reducers/user";
 
 export default function SigninScreen({ navigation }) {
+  const [firstName, setFirstname] = useState("");
+  const [lastName, setLastname] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [passwordVisible, setPasswordVisible] = useState(true);
+  const EMAIL_REGEX =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
-
-  const EMAIL_REGEX =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-  // const myTextInput = ({icon})
-
-  const handleLogin = () => {
-    fetch("https://driveher-backend.vercel.app/users/signin", {
+  const handleRegister = () => {
+    fetch("https://driveher-backend.vercel.app/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email, password: password }),
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        email: email.toLocaleLowerCase(),
+        password: password,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-
         if (data.result) {
           dispatch(
             login({ token: data.user.token, firstname: data.user.firstName })
           );
+          setFirstname("");
+          setLastname("");
+          setPhoneNumber("");
           setEmail("");
           setPassword("");
           navigation.navigate("TabNavigator", { screen: "AccueilScreen" });
         }
-      })
-      .catch((error) => console.log(error));
+      });
   };
 
-  const pressInscription = () => {
-    navigation.navigate("Signup");
-    setEmail("");
-    setPassword("");
+  const handleEmailVerification = () => {
+    if (EMAIL_REGEX.test(email)) {
+      dispatch(updateEmail(email));
+      navigation.navigate({ screen: "" });
+    } else {
+      setEmailError(true);
+    }
   };
 
   return (
@@ -66,50 +75,56 @@ export default function SigninScreen({ navigation }) {
       <View style={styles.logoHomeContainer}>
         <Text style={styles.logo}>Driv'Her</Text>
       </View>
-
       <View style={styles.formContainer}>
-        <Text style={styles.titletop}>S'identifier</Text>
+        <Text style={styles.title}>Créer votre compte</Text>
 
+        <TextInput
+          placeholder="Prénom"
+          onChangeText={(value) => setFirstname(value)}
+          value={firstName}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Nom"
+          onChangeText={(value) => setLastname(value)}
+          value={lastName}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Mobile"
+          onChangeText={(value) => setPhoneNumber(value)}
+          value={phoneNumber}
+          style={styles.input}
+        />
         <TextInput
           placeholder="E-mail"
           onChangeText={(value) => setEmail(value)}
           value={email}
           style={styles.input}
         />
-
-        {emailError && (
-          <Text style={styles.error}>
-            Veuillez saisir une adresse electronique valide
-          </Text>
-        )}
-
         <TextInput
           placeholder="Password"
           onChangeText={(value) => setPassword(value)}
           value={password}
           style={styles.input}
-          secureTextEntry={true}
+          secureTextEntry={passwordVisible}
         />
       </View>
+      <Text>Vous avez déja un compte ?</Text>
 
-      <View style={styles.btnContainer}>
-        <Text style={styles.titlebottom}>Vous n'avez pas de compte?</Text>
-
-        <TouchableOpacity
-          onPress={() => pressInscription()}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.link}>S'inscrire</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => handleLogin()}
-          style={styles.button}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.textButton}>Valider</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Signin")}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.link}>Connexion</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => handleRegister() && handleEmailVerification()}
+        style={styles.button}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.textButton}>Inscription</Text>
+      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
@@ -124,50 +139,35 @@ const styles = StyleSheet.create({
 
   formContainer: {
     width: "100%",
-    height: "30%",
-    alignItems: "center",
-  },
-  btnContainer: {
-    width: "100%",
-    height: "30%",
-    // marginTop:30,
     alignItems: "center",
   },
 
-  titletop: {
-    width: "30%",
-    fontSize: 24,
-    fontWeight: "10",
-    // marginTop: "30%",
-    textAlign: "center",
-  },
-  titlebottom: {
+  title: {
     width: "80%",
-    fontSize: 18,
-    fontWeight: "10",
-    // marginTop: "20%",
-    textAlign: "center",
-    // position: "relative",
+    fontSize: 28,
+    fontWeight: "600",
   },
-
   input: {
     width: "80%",
-    marginTop: 50,
+    marginTop: 35,
     borderBottomColor: "grey",
     borderBottomWidth: 1,
     fontSize: 18,
   },
   button: {
     alignItems: "center",
+    padding: 10,
     width: "80%",
     marginTop: 30,
     backgroundColor: "#73DDAA",
-    borderRadius: 20,
-    // marginBottom: 80,
-    justifyContent: "center",
-    // marginVertical: 5,
+    borderRadius: 10,
+    marginBottom: 80,
   },
-
+  textButton: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
   link: {
     alignItems: "center",
     width: "80%",
@@ -176,24 +176,6 @@ const styles = StyleSheet.create({
     color: "#29a3da",
     borderBottomColor: "#29a3da",
     borderBottomWidth: 1,
-    marginTop: 20,
-  },
-
-  textButton: {
-    color: "#ffffff",
-    height: 30,
-    fontWeight: "600",
-    fontSize: 20,
-    textAlign: "center",
-    margin: 15,
-  },
-  icon: {
-    color: "green",
-    height: 30,
-    fontWeight: "600",
-    fontSize: 20,
-    textAlign: "center",
-    margin: 15,
   },
   logo: {
     fontSize: 40,
@@ -208,6 +190,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  // emailContainer: {
-  //   width: "80%",
 });

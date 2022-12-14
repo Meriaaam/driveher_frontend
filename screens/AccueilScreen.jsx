@@ -7,7 +7,7 @@ import Header from './Header';
 
 import { useState, useEffect } from 'react';
 
-export default function AccueilScreen () {
+export default function AccueilScreen ({navigation}) {
 
     const [position, setPosition] = useState({latitude:48.34, longitude:2.8})
 
@@ -43,7 +43,7 @@ export default function AccueilScreen () {
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style = {styles.container}>
-            <Header/>
+            <Header navigation={navigation} />
             <View style = {styles.formContainer}>
                 <TextInput onChangeText={value => setDeparture(value)} value={departure}   style={styles.input} placeholder='Départ' />
                 <TextInput onChangeText={value => setArrival(value)} value={arrival}  style = {styles.input} placeholder='Destination' />
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         alignItems:'center',
-        justifyContent:'space-evenly',
+        justifyContent:'space-between',
         paddingBottom:30
     },
     logoContainer:{
