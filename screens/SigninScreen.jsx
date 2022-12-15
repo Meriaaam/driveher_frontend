@@ -3,6 +3,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 //import { Octicons, Ionicons } from "@expo/vector-icons";
 import {
   Button,
+  Pressable,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -12,23 +13,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Header from "./Header";
-// import { useDispatch } from "react-redux";
-// import { updateNickname } from '../reducers/user';
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../reducers/user";
+import { Modal } from "react-native";
 
 export default function SigninScreen({ navigation }) {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.value);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const EMAIL_REGEX =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-  // const myTextInput = ({icon})
-
-  const handleSubmit = () => {
+  const handleLogin = () => {
     fetch("https://driveher-backend.vercel.app/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -36,81 +34,94 @@ export default function SigninScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-
         if (data.result) {
-          // dispatch(login({ email: signInEmail, token: data.token }));
+          dispatch(
+            login({ token: data.user.token, firstname: data.user.firstName })
+          );
           setEmail("");
           setPassword("");
-          // setIsModalVisible(false)
+          navigation.navigate("TabNavigator", { screen: "AccueilScreen" });
+        } else {
+          setModalVisible(true);
         }
       })
       .catch((error) => console.log(error));
-
-    if (EMAIL_REGEX.test(email)) {
-      navigation.navigate("TabNavigator", { screen: "AccueilScreen" });
-    } else {
-      setEmailError(true);
-    }
-    // const handleSubmit = () => {
-    //   // dispatch(updateNickname(nickname));
-    //   // navigation.navigate('TabNavigator');
-    // };
   };
+
+  const pressInscription = () => {
+    navigation.navigate("Signup");
+    setEmail("");
+    setPassword("");
+  };
+
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View style={styles.logoContainer}>
-          <Text style={styles.logo} >Driv'Her</Text>
+    <KeyboardAvoidingView style={styles.container}>
+      <View style={styles.logoHomeContainer}>
+        <Text onPress={() => navigation.navigate("Home")} style={styles.logo}>
+          Driv'Her
+        </Text>
+      </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <FontAwesome name="warning" size={20} color="red" />
+          <Text style={styles.connexionError}>
+            Coordonnées de connexion incorrectes
+          </Text>
+          <Pressable
+            style={styles.buttonClose}
+            onPress={() => setModalVisible(!modalVisible)}
+          >
+            <Text style={styles.textCloseStyle}>OK</Text>
+          </Pressable>
         </View>
+      </Modal>
 
       <View style={styles.formContainer}>
+        <Text style={styles.titletop}>S'identifier</Text>
 
-      <Text style={styles.titletop}>S'identifier</Text>
+        <TextInput
+          placeholder="E-mail"
+          onChangeText={(value) => setEmail(value)}
+          value={email}
+          style={styles.input}
+        />
 
-      <TextInput
-      
-        placeholder="E-mail"
-        onChangeText={(value) => setEmail(value)}
-        value={email}
-        style={styles.input}
-      />
-      
-      {emailError && (
-        <Text style={styles.error}>
-          Veuillez saisir une adresse electronique valide
-        </Text>
-      )}
-
-      <TextInput
-        placeholder="Password"
-        onChangeText={(value) => setPassword(value)}
-        value={password}
-        style={styles.input}
-        secureTextEntry={true}
-      />
+        <TextInput
+          placeholder="Password"
+          onChangeText={(value) => setPassword(value)}
+          value={password}
+          style={styles.input}
+          secureTextEntry={true}
+        />
       </View>
 
       <View style={styles.btnContainer}>
+        <Text style={styles.titlebottom}>Vous n'avez pas de compte?</Text>
 
-      <Text style={styles.titlebottom}>Vous n'avez pas de compte?</Text>
+        <TouchableOpacity
+          onPress={() => pressInscription()}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.link}>S'inscrire</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleSubmit()} activeOpacity={0.8}>
-        <Text style={styles.link}>S'inscrire</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => handleSubmit()}
-        style={styles.button}
-        activeOpacity={0.8}
-      >
-        
-        <Text style={styles.textButton}>Valider</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleLogin()}
+          style={styles.button}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.textButton}>Valider</Text>
+        </TouchableOpacity>
       </View>
-
     </KeyboardAvoidingView>
   );
 }
@@ -120,35 +131,37 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
     alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  logoContainer:{
-    width:'100%',
-    height:'18%',
-    backgroundColor:'#BE355C',
-    justifyContent:'center',
-    alignItems:'center',
-    
-  },
-  logo:{
-    color:'#fff',
-    fontSize:40,
-    fontWeight:'bold'
+    justifyContent: "space-between",
   },
 
-  formContainer:{
-    width:'100%',
-    height:'30%',
-    alignItems:'center'
-
+  logo: {
+    fontSize: 40,
+    color: "#fff",
+    fontWeight: "bold",
+    // fontFamily:'Verdana'
   },
-  btnContainer:{
-    width:'100%',
-    height:'30%',
+
+  logoHomeContainer: {
+    width: "100%",
+    height: "18%",
+    backgroundColor: "#BE355C",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  formContainer: {
+    width: "100%",
+    height: "30%",
+    alignItems: "center",
+  },
+
+  btnContainer: {
+    width: "100%",
+    height: "30%",
     // marginTop:30,
-    alignItems:'center'
+    alignItems: "center",
   },
- 
+
   titletop: {
     width: "30%",
     fontSize: 24,
@@ -156,6 +169,7 @@ const styles = StyleSheet.create({
     // marginTop: "30%",
     textAlign: "center",
   },
+
   titlebottom: {
     width: "80%",
     fontSize: 18,
@@ -168,10 +182,11 @@ const styles = StyleSheet.create({
   input: {
     width: "80%",
     marginTop: 50,
-    borderBottomColor: "dark",
+    borderBottomColor: "grey",
     borderBottomWidth: 1,
     fontSize: 18,
   },
+
   button: {
     alignItems: "center",
     width: "80%",
@@ -185,12 +200,13 @@ const styles = StyleSheet.create({
 
   link: {
     alignItems: "center",
-    // paddingTop: 10,
     width: "80%",
-    // marginTop: 40,
-    // marginBottom: 60,
     fontSize: 20,
-    color: "red",
+    fontWeight: "bold",
+    color: "#29a3da",
+    borderBottomColor: "#29a3da",
+    borderBottomWidth: 1,
+    marginTop: 20,
   },
 
   textButton: {
@@ -201,6 +217,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 15,
   },
+
   icon: {
     color: "green",
     height: 30,
@@ -209,7 +226,39 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 15,
   },
-  // emailContainer: {
-  //   width: "80%",
-  
+  errorContainer: {
+    flexDirection: "row",
+  },
+
+  connexionError: {
+    color: "red",
+    fontSize: 12,
+    // marginLeft: 10,
+    width: "80%",
+  },
+
+  centeredView: {
+    backgroundColor: "#fff",
+    borderColor: "grey",
+    borderWidth: 1,
+    width: "80%",
+    height: "20%",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    marginTop: "75%",
+    marginLeft: "10%",
+  },
+
+  buttonClose: {
+    backgroundColor: "#BE355C",
+    width: "30%",
+    padding: 10,
+    alignItems: "center",
+    borderRadius: 7,
+  },
+
+  textCloseStyle: {
+    color: "#fff",
+  },
 });

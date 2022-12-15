@@ -4,20 +4,27 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 // _________________SCREENS IMPORTS____________________________
-import HomeScreen from "./screens/HomeScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import HistoriqueScreen from "./screens/HistoriqueScreen";
-import AccueilScreen from "./screens/AccueilScreen";
-import OrderResumeScreen from "./screens/OrderResumeScreen";
-import RatingScreen from "./screens/RatingScreen";
-import YourDriverScreen from "./screens/YourDriverScreen";
+import HomeScreen from './screens/HomeScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import HistoriqueScreen from './screens/HistoriqueScreen';
+import AccueilScreen from './screens/AccueilScreen';
+import OrderResumeScreen from './screens/OrderResumeScreen';
+import RatingScreen from './screens/RatingScreen';
+import YourDriverScreen from './screens/YourDriverScreen';
+import SigninScreen from './screens/SigninScreen';
+import SignupScreen from './screens/SignupScreen';
 
 // _________________REDUX IMPORTS_______________________________
 
-// redux
-import { Provider } from "react-redux";
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import user from "./reducers/user";
+// redux 
+import { Provider } from 'react-redux';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import user from './reducers/user';
+
+// redux-persist 
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // redux-persist
 import { persistStore, persistReducer } from "redux-persist";
@@ -83,6 +90,7 @@ export default function App() {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Order" component={OrderResumeScreen} />
             <Stack.Screen name="Signin" component={SigninScreen} />
+            <Stack.Screen name="Signup" component={SignupScreen} />
             <Stack.Screen name="Rating" component={RatingScreen} />
             <Stack.Screen name="Driver" component={YourDriverScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
