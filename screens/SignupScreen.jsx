@@ -35,7 +35,7 @@ export default function SigninScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
   const handleRegister = () => {
-    fetch("http://192.168.10.148:3000/users/signup", {
+    fetch("https://driveher-backend.vercel.app/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
