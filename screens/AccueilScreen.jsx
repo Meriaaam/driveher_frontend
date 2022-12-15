@@ -72,6 +72,10 @@ export default function AccueilScreen({ navigation }) {
   const handleDepart = async () => {
     const departPlace = {};
     const arrivalPlace = {};
+    var dist = 0;
+    let time = 0;
+    let price = 0;
+
     await fetch(`https://api-adresse.data.gouv.fr/search/?q=${departure}`)
       .then((res) => res.json())
       .then((data) => {
@@ -89,8 +93,51 @@ export default function AccueilScreen({ navigation }) {
           (arrivalPlace.longitude = arrivalData.geometry.coordinates[0]),
           setArrival('');
       });
-    console.log('accueil screen depart / arriver', departPlace, arrivalPlace);
-    dispatch(addItinery({ departure: departPlace, arrival: arrivalPlace }));
+
+    /* fonction de calcul d'une distance
+      entre deux points
+      */
+    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Radius of the earth in km
+      const dLat = deg2rad(lat2 - lat1); // deg2rad below
+      const dLon = deg2rad(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) *
+          Math.cos(deg2rad(lat2)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const d = R * c; // Distance in km
+      dist = d.toFixed(1);
+      return dist;
+    }
+
+    function deg2rad(deg) {
+      return deg * (Math.PI / 180);
+    }
+
+    getDistanceFromLatLonInKm(
+      departPlace.latitude,
+      departPlace.longitude,
+      arrivalPlace.latitude,
+      arrivalPlace.longitude
+    );
+
+    time = Math.round((dist / 50) * 60);
+    price = (time * 1.5).toFixed(1);
+
+    dispatch(
+      addItinery({
+        departure: departPlace,
+        arrival: arrivalPlace,
+        departureAddress: departure,
+        arrivalAddress: arrival,
+        distance: dist,
+        time: time,
+        price: price,
+      })
+    );
     navigation.navigate('Order');
   };
 
@@ -112,9 +159,7 @@ export default function AccueilScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-    >
+    <KeyboardAvoidingView style={styles.container}>
       <Header navigation={navigation} />
       <View style={styles.formContainer}>
         <TextInput
@@ -158,7 +203,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-  
   },
   logoContainer: {
     width: '100%',

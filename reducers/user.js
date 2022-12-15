@@ -7,6 +7,11 @@ const initialState = {
     orders: [],
     departure: {},
     arrival: {},
+    departureAddress: '',
+    arrivalAddress: '',
+    distance: null,
+    time: null,
+    price: null,
   },
 };
 
@@ -29,6 +34,11 @@ export const userSlice = createSlice({
       console.log('action-itinery', action.payload);
       state.value.departure = action.payload.departure;
       state.value.arrival = action.payload.arrival;
+      state.value.departureAddress = action.payload.departureAddress;
+      state.value.arrivalAddress = action.payload.arrivalAddress;
+      state.value.distance = action.payload.distance;
+      state.value.time = action.payload.time;
+      state.value.price = action.payload.price;
     },
     removeItinery: (state) => {
       state.value.departure = {};

@@ -35,38 +35,56 @@ export default function OrderResumeScreen({ navigation }) {
       <Header navigation={navigation} />
 
       {/* <View style={styles.centeredView}> */}
-        <MapView initialRegion={INITIAL_POSITION} style={styles.map}>
-          <Marker coordinate={user.departure} title="Départ" pinColor="green" />
-          <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow" />
-          <MapViewDirections
-            origin={user.departure}
-            destination={user.arrival}
-            apikey={GOOGLE_API_KEY}
-            strokeColor="hotpink"
-            strokeWidth={5}
-            optimizeWaypoints={true}
-          />
-        </MapView>
-        <View style={styles.buttonsBlock}>
-          <TouchableOpacity style={styles.button}>
-            <Text
-              onPress={() => {
-                dispatch(removeItinery());
-                navigation.navigate('Accueil');
-              }}
-              style={styles.buttonText}
-            >
-              Précédent
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={styles.button}>
-            <Text style={styles.buttonText}>Réserver !</Text>
-          </TouchableOpacity>
-        </View>
-      {/* </View> */}
-      <View>
-
+      <MapView initialRegion={INITIAL_POSITION} style={styles.map}>
+        <Marker coordinate={user.departure} title="Départ" pinColor="green" />
+        <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow" />
+        <MapViewDirections
+          origin={user.departure}
+          destination={user.arrival}
+          apikey={GOOGLE_API_KEY}
+          strokeColor="hotpink"
+          strokeWidth={5}
+          optimizeWaypoints={true}
+        />
+      </MapView>
+      <View style={styles.textBlock}>
+        <Text>
+          <Text style={styles.textStyle}>Départ : </Text>
+          {user.departureAddress}
+        </Text>
+        <Text>
+          <Text style={styles.textStyle}>Destination : </Text>
+          {user.arrivalAddress}
+        </Text>
+        <Text>
+          <Text style={styles.textStyle}>Temps estimé : </Text> {user.time}
+          minutes
+        </Text>
+        <Text>
+          <Text style={styles.textStyle}>Distance : </Text> {user.distance} km
+        </Text>
+        <Text>
+          <Text style={styles.textStyle}>Prix : </Text> {user.price} €
+        </Text>
       </View>
+      <View style={styles.buttonsBlock}>
+        <TouchableOpacity style={styles.button}>
+          <Text
+            onPress={() => {
+              dispatch(removeItinery());
+              navigation.navigate('Accueil');
+            }}
+            style={styles.buttonText}
+          >
+            Précédent
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {}} style={styles.button}>
+          <Text style={styles.buttonText}>Réserver !</Text>
+        </TouchableOpacity>
+      </View>
+      {/* </View> */}
+      <View></View>
     </View>
   );
 }
@@ -90,8 +108,8 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   centeredView: {
-    width:'100%',
-    height:'40%',
+    width: '100%',
+    height: '40%',
     alignItems: 'center',
   },
   map: {
@@ -100,10 +118,10 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#BE355C',
-    alignItems:'center',
-    width:'40%',
+    alignItems: 'center',
+    width: '40%',
     padding: 15,
-    borderRadius:7
+    borderRadius: 7,
   },
   buttonsBlock: {
     width: '100%',
@@ -113,6 +131,12 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize:18
+    fontSize: 18,
+  },
+  textBlock: {
+    alignItems: 'flex-start',
+  },
+  textStyle: {
+    fontWeight: 'bold',
   },
 });
