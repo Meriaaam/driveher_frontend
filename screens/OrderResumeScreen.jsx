@@ -11,6 +11,7 @@ import { removeItinery } from '../reducers/user';
 import { useSelector, useDispatch } from 'react-redux';
 import { GOOGLE_API_KEY } from '@env';
 import MapViewDirections from 'react-native-maps-directions';
+import Header from './Header';
 
 export default function OrderResumeScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -31,7 +32,9 @@ export default function OrderResumeScreen({ navigation }) {
   console.log('user', user);
   return (
     <View style={styles.container}>
-      <View style={styles.centeredView}>
+      <Header navigation={navigation} />
+
+      {/* <View style={styles.centeredView}> */}
         <MapView initialRegion={INITIAL_POSITION} style={styles.map}>
           <Marker coordinate={user.departure} title="Départ" pinColor="green" />
           <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow" />
@@ -60,6 +63,9 @@ export default function OrderResumeScreen({ navigation }) {
             <Text style={styles.buttonText}>Réserver !</Text>
           </TouchableOpacity>
         </View>
+      {/* </View> */}
+      <View>
+
       </View>
     </View>
   );
@@ -69,7 +75,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   input: {
     width: 250,
@@ -84,7 +90,8 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   centeredView: {
-    flex: 1,
+    width:'100%',
+    height:'40%',
     alignItems: 'center',
   },
   map: {
@@ -93,15 +100,19 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#BE355C',
-    padding: 20,
+    alignItems:'center',
+    width:'40%',
+    padding: 15,
+    borderRadius:7
   },
   buttonsBlock: {
-    width: 300,
+    width: '100%',
     marginTop: 50,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
   buttonText: {
     color: '#fff',
+    fontSize:18
   },
 });

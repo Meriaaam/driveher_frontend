@@ -102,7 +102,7 @@ export default function AccueilScreen({ navigation }) {
   const { width, height } = Dimensions.get('window');
 
   const ASPECT_RATIO = width / height;
-  const LATITUDE_DELTA = 0.02;
+  const LATITUDE_DELTA = 0.05;
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
   const INITIAL_POSITION = {
     latitude: currentPosition.latitude,
@@ -113,10 +113,9 @@ export default function AccueilScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <Header />
+      <Header navigation={navigation} />
       <View style={styles.formContainer}>
         <TextInput
           onChangeText={(value) => setDeparture(value)}
@@ -158,8 +157,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    paddingBottom: 30,
+    justifyContent: 'space-between',
+  
   },
   logoContainer: {
     width: '100%',
