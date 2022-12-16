@@ -15,16 +15,14 @@ import {
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import Header from './Header';
-import { addItinery } from '../reducers/user';
-import { useDispatch } from 'react-redux';
+import { addItinery, setCurrentPosition } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 
 export default function AccueilScreen({ navigation }) {
   const dispatch = useDispatch();
-  const [currentPosition, setCurrentPosition] = useState({
-    latitude: 48.88774374068149,
-    longitude: 2.3035903278363006,
-  });
+  const user = useSelector((state) => state.user.value);
+
   const [driversPosition, setDriversPosition] = useState([]);
   const [departure, setDeparture] = useState('');
   const [arrival, setArrival] = useState('');
@@ -35,7 +33,7 @@ export default function AccueilScreen({ navigation }) {
 
       if (status === 'granted') {
         Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          setCurrentPosition(location.coords);
+          dispatch(setCurrentPosition(location.coords));
         });
       }
     })();
@@ -109,7 +107,7 @@ export default function AccueilScreen({ navigation }) {
           Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       const d = R * c; // Distance in km
-      dist = d.toFixed(1);
+      dist = d.toFixed(2);
       return dist;
     }
 
@@ -125,7 +123,7 @@ export default function AccueilScreen({ navigation }) {
     );
 
     time = Math.round((dist / 50) * 60);
-    price = (time * 1.5).toFixed(1);
+    price = (time * 1.2).toFixed(1);
 
     dispatch(
       addItinery({
@@ -149,11 +147,11 @@ export default function AccueilScreen({ navigation }) {
   const { width, height } = Dimensions.get('window');
 
   const ASPECT_RATIO = width / height;
-  const LATITUDE_DELTA = 0.05;
+  const LATITUDE_DELTA = 0.03;
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
   const INITIAL_POSITION = {
-    latitude: currentPosition.latitude,
-    longitude: currentPosition.longitude,
+    latitude: user.latitude,
+    longitude: user.longitude,
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   };
@@ -179,8 +177,8 @@ export default function AccueilScreen({ navigation }) {
       <MapView style={styles.map} initialRegion={INITIAL_POSITION}>
         <Marker
           coordinate={{
-            latitude: currentPosition.latitude,
-            longitude: currentPosition.longitude,
+            latitude: user.latitude,
+            longitude: user.longitude,
           }}
           title="My Position"
         />

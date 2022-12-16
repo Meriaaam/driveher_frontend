@@ -17,14 +17,36 @@ export default function OrderResumeScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
-  const { width, height } = Dimensions.get('window');
+  /** fonction qui met à jour
+   * la latitude delta selon la distance de
+   * l'initneraire
+   */
+  function setLatDelta(dist) {
+    let latDelta;
+    if (dist > 680) {
+      latDelta = 6;
+    } else if (dist > 400 && dist < 679) {
+      latDelta = 4.5;
+    } else if (dist > 260 && dist < 399) {
+      latDelta = 3;
+    } else if (dist > 140 && dist < 259) {
+      latDelta = 1.5;
+    } else if (dist > 40 && dist < 139) {
+      latDelta = 0.6;
+    } else if (dist > 0 && dist < 39) {
+      latDelta = 0.2;
+    }
 
+    return latDelta;
+  }
+
+  const { width, height } = Dimensions.get('window');
   const ASPECT_RATIO = width / height;
-  const LATITUDE_DELTA = 0.1;
+  const LATITUDE_DELTA = setLatDelta(user.distance);
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
   const INITIAL_POSITION = {
-    latitude: 48.859,
-    longitude: 2.347,
+    latitude: (user.departure.latitude + user.arrival.latitude) / 2,
+    longitude: (user.departure.longitude + user.arrival.longitude) / 2,
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   };
@@ -57,7 +79,7 @@ export default function OrderResumeScreen({ navigation }) {
           {user.arrivalAddress}
         </Text>
         <Text>
-          <Text style={styles.textStyle}>Temps estimé : </Text> {user.time}
+          <Text style={styles.textStyle}>Temps estimé : </Text> {user.time}{' '}
           minutes
         </Text>
         <Text>
