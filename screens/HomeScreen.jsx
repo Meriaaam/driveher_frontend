@@ -4,8 +4,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
-} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+} from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function HomeScreen({ navigation }) {
   return (
@@ -21,8 +21,8 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity
           style={styles.startBtn}
           onPress={() => {
-            console.log(navigation);
-            navigation.navigate('Signin');
+            // console.log(navigation);
+            navigation.navigate("Signin");
           }}
         >
           <Text style={styles.btnText}>Commencer </Text>
@@ -37,57 +37,57 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
   },
   logoContainer: {
-    width: '100%',
-    height: '18%',
-    backgroundColor: '#BE355C',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: "18%",
+    backgroundColor: "#BE355C",
+    justifyContent: "center",
+    alignItems: "center",
   },
   logo: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 40,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   homeText: {
     fontSize: 20,
   },
   btnContainer: {
-    width: '100%',
-    height: '30%',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    width: "100%",
+    height: "30%",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   startBtn: {
-    backgroundColor: '#73DDAA',
+    backgroundColor: "#73DDAA",
     marginTop: 20,
-    width: '50%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    width: "50%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
     padding: 15,
     borderRadius: 7,
   },
   btnText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   logo: {
     fontSize: 40,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     // fontFamily:'Verdana'
   },
   logoHomeContainer: {
-    width: '100%',
-    height: '18%',
-    backgroundColor: '#BE355C',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: "18%",
+    backgroundColor: "#BE355C",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

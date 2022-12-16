@@ -6,6 +6,8 @@ import {
   Image,
   KeyboardAvoidingView,
   TextInput,
+  Alert,
+  SafeAreaView,
 } from "react-native";
 import * as React from "react";
 import Header from "./Header";
@@ -19,103 +21,124 @@ import { useState } from "react";
 export default function ProfileScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
-  const [text, setText] = React.useState("");
-
-  const [focus, setFocus] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
 
-  const [firstName, setFirstName] = useState("");
+  const [firstName, setFirstName] = useState({ history: "", new: "" });
+  const [lastName, setLastName] = useState({ history: "", new: "" });
+  const [phoneNumber, setPhoneNumber] = useState({ history: "", new: "" });
+  const [email, setEmail] = useState({history: "", new: "" });
 
-  
-useEffect(() => {
+  function changeHistory() {
+    setFirstName({ ...firstName, new: firstName.history });
+    setLastName({ ...lastName, new: lastName.history });
+    setPhoneNumber({ ...phoneNumber, new: phoneNumber.history });
+    setEmail({...email, new: email.history})
+  }
+  useEffect(() => {
+    fetch(`https://driveher-backend.vercel.app/users/userData/${user.token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          setFirstName({
+            ...firstName,
+            history: data.userData.firstName,
+            new: data.userData.firstName,
+          });
+          setLastName({
+            ...lastName,
+            history: data.userData.lastName,
+            new: data.userData.lastName,
+          });
 
-  fetch(`https://driveher-backend.vercel.app/users/userData/${user.token}`)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("dataaa", data);
+          setPhoneNumber({
+            ...phoneNumber,
+            history: data.userData.phoneNumber,
+            new: data.userData.phoneNumber,
+          });
+          setEmail({
+            ...email,
+            history: data.userData.email,
+            new: data.userData.email,
+          });
+        }
+      });
+  }, []);
+  // .catch((error) => console.log(error));
 
-      if (data.result) {
-        setFirstName(data.userData.firstName);
-        //         setPassword("");
-        //         // setIsModalVisible(false)
-      }
-    });
-},[])
-    // .catch((error) => console.log(error));
-  
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <Avatar.Image
-        style={styles.avatar}
-        size={100}
-        source={require("../assets/photo_profile.png")}
-      />
-      <View style={styles.inputContainer}>
-        <TouchableOpacity onPress={() => setIsEditable(true)}>
-          <FontAwesome name="pencil" size={30} color="#BE355C" />
-          {/* <Text style={styles.textButton}>Modifier</Text> */}
-        </TouchableOpacity>
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <Avatar.Image
+          style={styles.avatar}
+          size={100}
+          source={require("../assets/photo_profile.png")}
+        />
+        <View style={styles.inputContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              setIsEditable(true);
+            }}
+          >
+            <FontAwesome name="pencil" size={30} color="#BE355C" />
+            {/* <Text style={styles.textButton}>Modifier</Text> */}
+          </TouchableOpacity>
 
-        {/* <TouchableOpacity
+          {/* <TouchableOpacity
         
           // onPress={() => null}
           // onFocus={() => this.setState({ bgColor: "green" })}
           // onBlur={() => this.setState({ bgColor: "gray" })}
         > */}
-        <TextInput
-          style={styles.input}
-          // placeholder="Prenom"
-          onChangeText={(value) => setFirstName(value)}
-          value={firstName} // onFocus={() => this.onFocus()}
-          editable={isEditable}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Nom"
-          // value={text}
-          editable={isEditable}
-          onChangeText={(text) => setText(text)}
+          <TextInput
+            style={styles.input}
+            placeholder="Prenom"
+            onChangeText={(value) => setFirstName({ ...firstName, new: value })}
+            value={firstName.new}
+            editable={isEditable}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Nom"
+            onChangeText={(value) => setLastName({ ...lastName, new: value })}
+            value={lastName.new}
+            editable={isEditable}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Numero de telephone"
+            onChangeText={(value) => setPhoneNumber({ ...phoneNumber, new: value })}
+            value={phoneNumber.new.toString()}
+            editable={isEditable}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={(value) => setEmail({...email, new: value})}
+            value={email.new}
+            editable={isEditable}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Adresse favorite"
+            editable={isEditable}
+          />
 
-          // onPress={() => null}
-          // onFocus={() => this.setState({ bgColor: "green" })}
-          // onBlur={() => this.setState({ bgColor: "gray" })}
-        />
-        <TextInput
-          style={styles.input}
-          TextInput="Numero de telephone"
-          // value={text}
-          editable={isEditable}
-          onChangeText={(text) => setText(text)}
-        />
-        <TextInput
-          style={styles.input}
-          label="Email"
-          // value={text}
-          editable={isEditable}
-          onChangeText={(text) => setText(text)}
-        />
-        <TextInput
-          style={styles.input}
-          labeltext="Adresse favorite"
-          editable={isEditable}
-          onChangeText={(text) => setText(text)}
-        />
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => changeHistory()}>
+              <FontAwesome name="rotate-left" size={30} color="#BE355C" />
+            </TouchableOpacity>
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => setIsEditable(false)}>
-            <FontAwesome name="rotate-left" size={30} color="#BE355C" />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => setIsEditable(false)}>
-            <FontAwesome name="check" size={30} color="#73DDAA" />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => setIsEditable(false)}>
+              <FontAwesome name="check" size={30} color="#73DDAA" />
+            </TouchableOpacity>
+          </View>
+          {/* </TouchableOpacity> */}
         </View>
-        {/* </TouchableOpacity> */}
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -124,7 +147,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "aqua",
   },
 
   inputContainer: {
@@ -142,6 +164,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     borderBottomColor: "#BE355C",
     borderBottomWidth: 1,
+    // borderColor: "#BE355C",
+    // borderWidth: 1,
+    // borderRadius: 15,
     fontSize: 18,
   },
 
