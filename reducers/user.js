@@ -12,6 +12,8 @@ const initialState = {
     distance: null,
     time: null,
     price: null,
+    latitude: null,
+    longitude: null,
   },
 };
 
@@ -31,7 +33,7 @@ export const userSlice = createSlice({
       state.value.orders.push(action.payload);
     },
     addItinery: (state, action) => {
-      console.log('action-itinery', action.payload);
+      //console.log('action-itinery', action.payload);
       state.value.departure = action.payload.departure;
       state.value.arrival = action.payload.arrival;
       state.value.departureAddress = action.payload.departureAddress;
@@ -43,11 +45,31 @@ export const userSlice = createSlice({
     removeItinery: (state) => {
       state.value.departure = {};
       state.value.arrival = {};
-      console.log('removeData', state.value.departure, state.value.arrival);
+      state.value.departureAddress = '';
+      state.value.arrivalAddress = '';
+      state.value.distance = null;
+      state.value.time = null;
+      state.value.price = null;
+      //console.log('removeData', state.value.departure, state.value.arrival);
+    },
+    setCurrentPosition: (state, action) => {
+      // console.log(
+      //   'currentPos',
+      //   action.payload.latitude,
+      //   action.payload.longitude
+      // );
+      state.value.latitude = action.payload.latitude;
+      state.value.longitude = action.payload.longitude;
     },
   },
 });
 
-export const { login, logout, addOrder, addItinery, removeItinery } =
-  userSlice.actions;
+export const {
+  login,
+  logout,
+  addOrder,
+  addItinery,
+  removeItinery,
+  setCurrentPosition,
+} = userSlice.actions;
 export default userSlice.reducer;
