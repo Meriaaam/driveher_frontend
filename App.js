@@ -25,6 +25,7 @@ import user from './reducers/user';
 import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PaymentScreen from './screens/PaymentScreen';
 
 
 // ________________STORE CONFIGURATION_________________________
@@ -81,6 +82,9 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
+
+            <Stack.Screen name="Payment" component={PaymentScreen} />
+            
             <Stack.Screen name="Order" component={OrderResumeScreen} />
             <Stack.Screen name="Signin" component={SigninScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />

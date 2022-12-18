@@ -33,6 +33,7 @@ export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
+  
 
   const handleRegister = () => {
     fetch("https://driveher-backend.vercel.app/users/signup", {
@@ -59,7 +60,7 @@ export default function SigninScreen({ navigation }) {
           setPassword("");
           navigation.navigate("TabNavigator", { screen: "AccueilScreen" });
         } else {
-          if (data.error === "Email not valide") {
+          if(data.error === "Email not valide") {
             setEmailError(true);
           } else if (data.error === "User already exists") {
             setUserExistsModalVisible(true);
@@ -144,6 +145,7 @@ export default function SigninScreen({ navigation }) {
           onChangeText={(value) => setPhoneNumber(value)}
           value={phoneNumber}
           style={styles.input}
+          keyboardType='numeric'
         />
         <TextInput
           placeholder="E-mail"
