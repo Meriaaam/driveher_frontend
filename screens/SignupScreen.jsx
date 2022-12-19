@@ -58,7 +58,7 @@ export default function SigninScreen({ navigation }) {
           setPhoneNumber("");
           setEmail("");
           setPassword("");
-          navigation.navigate("TabNavigator", { screen: "AccueilScreen" });
+          navigation.navigate("Payment");
         } else {
           if(data.error === "Email not valide") {
             setEmailError(true);

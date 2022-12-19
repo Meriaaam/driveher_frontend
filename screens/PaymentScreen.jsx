@@ -4,23 +4,41 @@ import Header from "./Header";
 import { RadioButton } from "react-native-paper";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-export default function PaymentScreen() {
+export default function PaymentScreen({navigation}) {
+
+  const user = useSelector(state => state.user.value)
+
   const [checked, setChecked] = useState("first");
   const [cardNumber, setCardNumber] = useState(null);
-  const [expDate, setExpDate] = useState(null);
+  const [expiry, setExpiry] = useState(null);
   const [cvv, setCvv] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
 
-  // if(!cardNumber || !expDate || !cvv){
-  //   setIsDisabled(true);
-  // }
-  // else{
-  //   setIsDisabled(false)
-  // }
+  const handleValidate = () => {
+    console.log('hello');
+    fetch(`https://driveher-backend.vercel.app/users/addCard/${user.token}`, {
+          method:'PUT',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cardNumber: cardNumber})
+        }).then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if(data.result){
+            navigation.navigate('TabNavigator', {screen: 'AccueilScreen'})
+          }
+        })
+  }
+
+  const handleSkip = () => {
+    navigation.navigate('Accueil')
+  }
+
+  
   return (
     <View style={styles.container}>
-      <Header />
+      <Header navigation={navigation} />
       <Text style={styles.addText}>Ajouter un moyen de paiment</Text>
 
       <View style={styles.radionBtnContainer}>
@@ -43,18 +61,18 @@ export default function PaymentScreen() {
         <FontAwesome name="paypal" size={20} color="blue" style={styles.icon} />
       </View>
       <View style={styles.formContainer}>
-        <TextInput placeholder="Numéro de carte" style={styles.input} />
+        <TextInput onChangeText={(value) => setCardNumber(value) } value={cardNumber} placeholder="Numéro de carte" keyboardType="numeric" style={styles.input} />
         <TextInput
           placeholder="Expiration"
-          keyboardType=""
+          onChangeText={(value) => setExpiry(value) } value={expiry}
           style={styles.input}
         />
-        <TextInput placeholder="CVV" style={styles.input} />
+        <TextInput placeholder="CVV" onChangeText={(value) => setCvv(value) } value={cvv} keyboardType="numeric" style={styles.input} />
       </View>
 
       <View style={styles.btnContainer} >
         <TouchableOpacity
-          
+          onPress={() => handleValidate()}
           style={styles.button}
           activeOpacity={0.8}
           disabled={isDisabled}
@@ -62,6 +80,7 @@ export default function PaymentScreen() {
           <Text style={styles.textButton}>Valider</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          onPress = {() => handleSkip()}
           style={styles.button}
           activeOpacity={0.8}
         >

@@ -21,12 +21,7 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity
           style={styles.startBtn}
           onPress={() => {
-<<<<<<< HEAD
-            navigation.navigate('Payment');
-=======
-            // console.log(navigation);
-            navigation.navigate("Signin");
->>>>>>> main
+            navigation.navigate('Signin');
           }}
         >
           <Text style={styles.btnText}>Commencer </Text>

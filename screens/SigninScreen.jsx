@@ -40,7 +40,7 @@ export default function SigninScreen({ navigation }) {
           );
           setEmail("");
           setPassword("");
-          navigation.navigate("TabNavigator", { screen: "AccueilScreen" });
+          navigation.navigate("TabNavigator", {screen: 'AccueilScreen'} );
         } else {
           setModalVisible(true);
         }

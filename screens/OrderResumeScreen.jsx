@@ -51,6 +51,11 @@ export default function OrderResumeScreen({ navigation }) {
     longitudeDelta: LONGITUDE_DELTA,
   };
 
+  const handleCancel = () =>  {
+      dispatch(removeItinery());
+      navigation.navigate('Accueil');
+  }
+
   console.log('user', user);
   return (
     <View style={styles.container}>
@@ -70,38 +75,36 @@ export default function OrderResumeScreen({ navigation }) {
         />
       </MapView>
       <View style={styles.textBlock}>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Départ : </Text>
           {user.departureAddress}
         </Text>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Destination : </Text>
           {user.arrivalAddress}
         </Text>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Temps estimé : </Text> {user.time}{' '}
           minutes
         </Text>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Distance : </Text> {user.distance} km
         </Text>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Prix : </Text> {user.price} €
         </Text>
       </View>
       <View style={styles.buttonsBlock}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button}
+          onPress={() => handleCancel() }
+          >
           <Text
-            onPress={() => {
-              dispatch(removeItinery());
-              navigation.navigate('Accueil');
-            }}
             style={styles.buttonText}
           >
             Précédent
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.button}>
+        <TouchableOpacity  style={styles.button}>
           <Text style={styles.buttonText}>Réserver !</Text>
         </TouchableOpacity>
       </View>
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
   },
   buttonsBlock: {
     width: '100%',
-    marginTop: 50,
+    marginTop: 30,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
@@ -156,9 +159,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   textBlock: {
+    width:'100%',
+    paddingLeft:20,
     alignItems: 'flex-start',
   },
   textStyle: {
     fontWeight: 'bold',
   },
+  text:{
+    marginTop:15,
+    fontSize:18
+
+  }
 });
