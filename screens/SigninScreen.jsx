@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 //import { Octicons, Ionicons } from "@expo/vector-icons";
 import {
@@ -22,12 +22,18 @@ export default function SigninScreen({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
 
+  useEffect(() => {
+    if (user.token) {
+      navigation.navigate("TabNavigator");
+    }
+  }, []);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogin = () => {
-    console.log('hello');
+    console.log("hello");
     fetch("https://driveher-backend.vercel.app/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -37,13 +43,13 @@ export default function SigninScreen({ navigation }) {
       .then((data) => {
         console.log(data);
         if (data.result) {
-          console.log('hellotoo');
+          console.log("hellotoo");
           dispatch(
             login({ token: data.user.token, firstname: data.user.firstName })
           );
           setEmail("");
           setPassword("");
-          navigation.navigate("TabNavigator", {screen: 'AccueilScreen'} );
+          navigation.navigate("TabNavigator", { screen: "AccueilScreen" });
         } else {
           setModalVisible(true);
         }
