@@ -92,10 +92,10 @@ export default function OrderResumeScreen({ navigation }) {
 
       {/* <View style={styles.centeredView}> */}
       <MapView initialRegion={INITIAL_POSITION} style={styles.map}>
-        <Marker coordinate={user.departure} title="Départ" pinColor="green">
+        <Marker coordinate={user.departure} title="Départ">
           <Text style={styles.flag}>🚩</Text>
         </Marker>
-        <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow">
+        <Marker coordinate={user.arrival} title="Arrivée">
           <Text style={styles.flag}>🏁</Text>
         </Marker>
         <MapViewDirections
