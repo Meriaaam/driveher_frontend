@@ -1,5 +1,5 @@
-import { useState } from "react";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useEffect, useState } from 'react';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //import { Octicons, Ionicons } from "@expo/vector-icons";
 import {
   Button,
@@ -12,24 +12,24 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { login } from "../reducers/user";
-import { Modal } from "react-native";
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../reducers/user';
+import { Modal } from 'react-native';
 
 export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogin = () => {
-    fetch("https://driveher-backend.vercel.app/users/signin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch('https://driveher-backend.vercel.app/users/signin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: email, password: password }),
     })
       .then((response) => response.json())
@@ -38,9 +38,9 @@ export default function SigninScreen({ navigation }) {
           dispatch(
             login({ token: data.user.token, firstname: data.user.firstName })
           );
-          setEmail("");
-          setPassword("");
-          navigation.navigate("TabNavigator", {screen: 'AccueilScreen'} );
+          setEmail('');
+          setPassword('');
+          navigation.navigate('TabNavigator', { screen: 'AccueilScreen' });
         } else {
           setModalVisible(true);
         }
@@ -49,15 +49,21 @@ export default function SigninScreen({ navigation }) {
   };
 
   const pressInscription = () => {
-    navigation.navigate("Signup");
-    setEmail("");
-    setPassword("");
+    navigation.navigate('Signup');
+    setEmail('');
+    setPassword('');
   };
+
+  useEffect(() => {
+    if (user.token) {
+      navigation.navigate('TabNavigator', { screen: 'AccueilScreen' });
+    }
+  }, []);
 
   return (
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.logoHomeContainer}>
-        <Text onPress={() => navigation.navigate("Home")} style={styles.logo}>
+        <Text onPress={() => navigation.navigate('Home')} style={styles.logo}>
           Driv'Her
         </Text>
       </View>
@@ -67,7 +73,7 @@ export default function SigninScreen({ navigation }) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}
       >
@@ -129,136 +135,136 @@ export default function SigninScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "space-between",
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 
   logo: {
     fontSize: 40,
-    color: "#fff",
-    fontWeight: "bold",
+    color: '#fff',
+    fontWeight: 'bold',
     // fontFamily:'Verdana'
   },
 
   logoHomeContainer: {
-    width: "100%",
-    height: "18%",
-    backgroundColor: "#BE355C",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    height: '18%',
+    backgroundColor: '#BE355C',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   formContainer: {
-    width: "100%",
-    height: "30%",
-    alignItems: "center",
+    width: '100%',
+    height: '30%',
+    alignItems: 'center',
   },
 
   btnContainer: {
-    width: "100%",
-    height: "30%",
+    width: '100%',
+    height: '30%',
     // marginTop:30,
-    alignItems: "center",
+    alignItems: 'center',
   },
 
   titletop: {
-    width: "30%",
+    width: '30%',
     fontSize: 24,
-    fontWeight: "10",
+    fontWeight: '10',
     // marginTop: "30%",
-    textAlign: "center",
+    textAlign: 'center',
   },
 
   titlebottom: {
-    width: "80%",
+    width: '80%',
     fontSize: 18,
-    fontWeight: "10",
+    fontWeight: '10',
     // marginTop: "20%",
-    textAlign: "center",
+    textAlign: 'center',
     // position: "relative",
   },
 
   input: {
-    width: "80%",
+    width: '80%',
     marginTop: 50,
-    borderBottomColor: "grey",
+    borderBottomColor: 'grey',
     borderBottomWidth: 1,
     fontSize: 18,
   },
 
   button: {
-    alignItems: "center",
-    width: "80%",
+    alignItems: 'center',
+    width: '80%',
     marginTop: 30,
-    backgroundColor: "#73DDAA",
+    backgroundColor: '#73DDAA',
     borderRadius: 20,
     // marginBottom: 80,
-    justifyContent: "center",
+    justifyContent: 'center',
     // marginVertical: 5,
   },
 
   link: {
-    alignItems: "center",
-    width: "80%",
+    alignItems: 'center',
+    width: '80%',
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#29a3da",
-    borderBottomColor: "#29a3da",
+    fontWeight: 'bold',
+    color: '#29a3da',
+    borderBottomColor: '#29a3da',
     borderBottomWidth: 1,
     marginTop: 20,
   },
 
   textButton: {
-    color: "#ffffff",
+    color: '#ffffff',
     height: 30,
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 20,
-    textAlign: "center",
+    textAlign: 'center',
     margin: 15,
   },
 
   icon: {
-    color: "green",
+    color: 'green',
     height: 30,
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 20,
-    textAlign: "center",
+    textAlign: 'center',
     margin: 15,
   },
   errorContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 
   connexionError: {
-    color: "red",
+    color: 'red',
     fontSize: 12,
     // marginLeft: 10,
-    width: "80%",
+    width: '80%',
   },
 
   centeredView: {
-    backgroundColor: "#fff",
-    borderColor: "grey",
+    backgroundColor: '#fff',
+    borderColor: 'grey',
     borderWidth: 1,
-    width: "80%",
-    height: "20%",
+    width: '80%',
+    height: '20%',
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    marginTop: "75%",
-    marginLeft: "10%",
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    marginTop: '75%',
+    marginLeft: '10%',
   },
 
   buttonClose: {
-    backgroundColor: "#BE355C",
-    width: "30%",
+    backgroundColor: '#BE355C',
+    width: '30%',
     padding: 10,
-    alignItems: "center",
+    alignItems: 'center',
     borderRadius: 7,
   },
 
   textCloseStyle: {
-    color: "#fff",
+    color: '#fff',
   },
 });

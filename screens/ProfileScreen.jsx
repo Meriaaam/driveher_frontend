@@ -8,25 +8,26 @@ import {
   TextInput,
   Alert,
   SafeAreaView,
-} from "react-native";
-import Header from "./Header";
-import * as React from "react";
-import { Avatar } from "react-native-paper";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+} from 'react-native';
+import Header from './Header';
+import * as React from 'react';
+import { Avatar } from 'react-native-paper';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function ProfileScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
   const [isEditable, setIsEditable] = useState(false);
+  const [canEdit, setCanEdit] = useState(false);
 
-  const [firstName, setFirstName] = useState({ history: "", new: "" });
-  const [lastName, setLastName] = useState({ history: "", new: "" });
-  const [phoneNumber, setPhoneNumber] = useState({ history: "", new: "" });
-  const [email, setEmail] = useState({ history: "", new: "" });
+  const [firstName, setFirstName] = useState({ history: '', new: '' });
+  const [lastName, setLastName] = useState({ history: '', new: '' });
+  const [phoneNumber, setPhoneNumber] = useState({ history: '', new: '' });
+  const [email, setEmail] = useState({ history: '', new: '' });
 
   function changeHistory() {
     setFirstName({ ...firstName, new: firstName.history });
@@ -65,6 +66,15 @@ export default function ProfileScreen({ navigation }) {
   }, []);
   // .catch((error) => console.log(error));
 
+  const handleEdit = () => {
+    setIsEditable(true);
+    setCanEdit(true);
+  };
+  const handleSave = () => {
+    setIsEditable(false);
+    setCanEdit(false);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView style={styles.container}>
@@ -73,18 +83,17 @@ export default function ProfileScreen({ navigation }) {
           <Avatar.Image
             style={styles.avatar}
             size={100}
-            source={require("../assets/photo_profile.png")}
+            source={require('../assets/photo_profile.png')}
           />
         </View>
-          <TouchableOpacity
-            onPress={() => {
-              setIsEditable(true);
-            }}
-          >
-            <FontAwesome name="pencil" size={30} color="#BE355C" />
-          </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            handleEdit();
+          }}
+        >
+          <FontAwesome name="pencil" size={30} color="#BE355C" />
+        </TouchableOpacity>
         <View style={styles.inputContainer}>
-
           <TextInput
             style={styles.input}
             placeholder="Prenom"
@@ -122,16 +131,16 @@ export default function ProfileScreen({ navigation }) {
           />
         </View>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => changeHistory()}>
-              <FontAwesome name="rotate-left" size={30} color="#BE355C" />
-            </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => changeHistory()}>
+            <FontAwesome name="rotate-left" size={30} color="#BE355C" />
+          </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setIsEditable(false)}>
-              <FontAwesome name="check" size={30} color="#73DDAA" />
-            </TouchableOpacity>
-          </View>
-          {/* </TouchableOpacity> */}
+          <TouchableOpacity onPress={() => handleSave()}>
+            <FontAwesome name="check" size={30} color="#73DDAA" />
+          </TouchableOpacity>
+        </View>
+        {/* </TouchableOpacity> */}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -140,26 +149,26 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
 
   inputContainer: {
-    width: "100%",
-    height:'50%',
+    width: '100%',
+    height: '50%',
     // flexDirection: "column",
-    borderBottomColor: "#BE355C",
-    alignItems: "center",
+    borderBottomColor: '#BE355C',
+    alignItems: 'center',
     // justifyContent: "center",
     //     // backgroundColor: '#fbe29c',
   },
 
   input: {
-    width: "80%",
-    padding:10,
+    width: '80%',
+    padding: 10,
     // height: "10%",
     marginTop: 5,
-    borderBottomColor: "#BE355C",
+    borderBottomColor: '#BE355C',
     borderBottomWidth: 1,
     // borderColor: "#BE355C",
     // borderWidth: 1,
@@ -174,7 +183,7 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     width: '100%',
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });

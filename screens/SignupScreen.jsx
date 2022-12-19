@@ -1,5 +1,5 @@
-import { useState } from "react";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useState } from 'react';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
   Button,
   KeyboardAvoidingView,
@@ -11,17 +11,17 @@ import {
   View,
   Modal,
   Pressable,
-} from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { login } from "../reducers/user";
-import user from "../reducers/user";
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../reducers/user';
+import user from '../reducers/user';
 
 export default function SigninScreen({ navigation }) {
-  const [firstName, setFirstname] = useState("");
-  const [lastName, setLastname] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstName, setFirstname] = useState('');
+  const [lastName, setLastname] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [userExistsModalVisible, setUserExistsModalVisible] = useState(false);
@@ -33,12 +33,11 @@ export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
-  
 
   const handleRegister = () => {
-    fetch("https://driveher-backend.vercel.app/users/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch('https://driveher-backend.vercel.app/users/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         firstName: firstName,
         lastName: lastName,
@@ -53,18 +52,18 @@ export default function SigninScreen({ navigation }) {
           dispatch(
             login({ token: data.user.token, firstname: data.user.firstName })
           );
-          setFirstname("");
-          setLastname("");
-          setPhoneNumber("");
-          setEmail("");
-          setPassword("");
-          navigation.navigate("Payment");
+          setFirstname('');
+          setLastname('');
+          setPhoneNumber('');
+          setEmail('');
+          setPassword('');
+          navigation.navigate('Payment');
         } else {
-          if(data.error === "Email not valide") {
+          if (data.error === 'Email not valid') {
             setEmailError(true);
-          } else if (data.error === "User already exists") {
+          } else if (data.error === 'User already exists') {
             setUserExistsModalVisible(true);
-          } else if (data.error === "Missing or empty fields") {
+          } else if (data.error === 'Missing or empty fields') {
             setModalVisible(true);
           }
         }
@@ -74,7 +73,7 @@ export default function SigninScreen({ navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.logoHomeContainer}>
-        <Text onPress={() => navigation.navigate("Home")} style={styles.logo}>
+        <Text onPress={() => navigation.navigate('Home')} style={styles.logo}>
           Driv'Her
         </Text>
       </View>
@@ -84,7 +83,7 @@ export default function SigninScreen({ navigation }) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}
       >
@@ -107,7 +106,7 @@ export default function SigninScreen({ navigation }) {
         transparent={true}
         visible={userExistsModalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}
       >
@@ -145,7 +144,7 @@ export default function SigninScreen({ navigation }) {
           onChangeText={(value) => setPhoneNumber(value)}
           value={phoneNumber}
           style={styles.input}
-          keyboardType='numeric'
+          keyboardType="numeric"
         />
         <TextInput
           placeholder="E-mail"
@@ -170,7 +169,7 @@ export default function SigninScreen({ navigation }) {
       <Text>Vous avez déja un compte ?</Text>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("Signin")}
+        onPress={() => navigation.navigate('Signin')}
         activeOpacity={0.8}
       >
         <Text style={styles.link}>Connexion</Text>
@@ -189,99 +188,99 @@ export default function SigninScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "space-between",
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 
   formContainer: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
 
   title: {
-    width: "80%",
+    width: '80%',
     fontSize: 28,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   input: {
-    width: "80%",
+    width: '80%',
     marginTop: 35,
-    borderBottomColor: "grey",
+    borderBottomColor: 'grey',
     borderBottomWidth: 1,
     fontSize: 18,
   },
   button: {
-    alignItems: "center",
+    alignItems: 'center',
     padding: 10,
-    width: "80%",
+    width: '80%',
     marginTop: 30,
-    backgroundColor: "#73DDAA",
+    backgroundColor: '#73DDAA',
     borderRadius: 10,
     marginBottom: 80,
   },
   textButton: {
-    color: "#ffffff",
-    fontWeight: "bold",
+    color: '#ffffff',
+    fontWeight: 'bold',
     fontSize: 20,
   },
   link: {
-    alignItems: "center",
-    width: "80%",
+    alignItems: 'center',
+    width: '80%',
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#29a3da",
-    borderBottomColor: "#29a3da",
+    fontWeight: 'bold',
+    color: '#29a3da',
+    borderBottomColor: '#29a3da',
     borderBottomWidth: 1,
   },
   logo: {
     fontSize: 40,
-    color: "#fff",
-    fontWeight: "bold",
+    color: '#fff',
+    fontWeight: 'bold',
     // fontFamily:'Verdana'
   },
   logoHomeContainer: {
-    width: "100%",
-    height: "18%",
-    backgroundColor: "#BE355C",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    height: '18%',
+    backgroundColor: '#BE355C',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   connexionError: {
-    color: "red",
+    color: 'red',
     fontSize: 12,
     // marginLeft: 10,
-    width: "80%",
+    width: '80%',
   },
 
   centeredView: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: "grey",
-    width: "80%",
-    height: "20%",
+    borderColor: 'grey',
+    width: '80%',
+    height: '20%',
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    marginTop: "75%",
-    marginLeft: "10%",
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    marginTop: '75%',
+    marginLeft: '10%',
   },
 
   buttonClose: {
-    backgroundColor: "#BE355C",
-    width: "30%",
+    backgroundColor: '#BE355C',
+    width: '30%',
     padding: 10,
-    alignItems: "center",
+    alignItems: 'center',
     borderRadius: 7,
   },
 
   textCloseStyle: {
-    color: "#fff",
+    color: '#fff',
   },
 
   emailError: {
-    color: "red",
+    color: 'red',
     marginTop: 10,
     fontSize: 18,
   },
