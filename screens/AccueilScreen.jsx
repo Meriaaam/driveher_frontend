@@ -22,7 +22,7 @@ import { useState, useEffect } from 'react';
 export default function AccueilScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-
+  console.log('user', user);
   const [driversPosition, setDriversPosition] = useState([]);
   const [departure, setDeparture] = useState('');
   const [arrival, setArrival] = useState('');

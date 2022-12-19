@@ -53,10 +53,9 @@ export default function OrderResumeScreen({ navigation }) {
 
   const handleCancel = () => {
     dispatch(removeItinery());
-    navigation.navigate('Accueil');
+    navigation.goBack();
   };
 
-  console.log('user', user);
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
