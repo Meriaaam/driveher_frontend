@@ -63,8 +63,9 @@ export default function AccueilScreen({ navigation }) {
         key={i}
         coordinate={{ latitude: data.latitude, longitude: data.longitude }}
         title={data.firstName}
-        pinColor="hotpink"
-      />
+      >
+        <Text>🚗</Text>
+      </Marker>
     );
   });
   const handleDepart = async () => {
@@ -181,7 +182,9 @@ export default function AccueilScreen({ navigation }) {
             longitude: user.longitude,
           }}
           title="My Position"
-        />
+        >
+          <Text style={styles.flag}>🚩</Text>
+        </Marker>
         {drivers}
       </MapView>
       <View style={styles.btnContainer}>
@@ -249,5 +252,8 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  flag: {
+    fontSize: 30,
   },
 });

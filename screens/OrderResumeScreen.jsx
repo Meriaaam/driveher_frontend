@@ -58,8 +58,12 @@ export default function OrderResumeScreen({ navigation }) {
 
       {/* <View style={styles.centeredView}> */}
       <MapView initialRegion={INITIAL_POSITION} style={styles.map}>
-        <Marker coordinate={user.departure} title="Départ" pinColor="green" />
-        <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow" />
+        <Marker coordinate={user.departure} title="Départ" pinColor="green">
+          <Text style={styles.flag}>🚩</Text>
+        </Marker>
+        <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow">
+          <Text style={styles.flag}>🏁</Text>
+        </Marker>
         <MapViewDirections
           origin={user.departure}
           destination={user.arrival}
@@ -160,5 +164,8 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontWeight: 'bold',
+  },
+  flag: {
+    fontSize: 30,
   },
 });
