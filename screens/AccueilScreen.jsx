@@ -40,7 +40,7 @@ export default function AccueilScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
-    fetch('https://driveher-backend.vercel.app//drivers/displayDrivers')
+    fetch('https://driveher-backend.vercel.app/drivers/displayDrivers')
       .then((res) => res.json())
       .then((data) => {
         const drivers = data.drivers.map((driver) => {
@@ -256,6 +256,7 @@ const styles = StyleSheet.create({
   flag: {
     fontSize: 30,
   },
+ 
 });
 
 

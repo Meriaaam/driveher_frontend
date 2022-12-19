@@ -11,11 +11,13 @@ import { removeItinery } from '../reducers/user';
 import { useSelector, useDispatch } from 'react-redux';
 import { GOOGLE_API_KEY } from '@env';
 import MapViewDirections from 'react-native-maps-directions';
+import { useState } from 'react';
 import Header from './Header';
 
 export default function OrderResumeScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  // const [driversData, setDriversData] = useState([])
 
   /** fonction qui met à jour
    * la latitude delta selon la distance de
@@ -53,8 +55,36 @@ export default function OrderResumeScreen({ navigation }) {
 
   const handleCancel = () => {
     dispatch(removeItinery());
-    navigation.goBack();
+    navigation.goBack()
   };
+
+  // fetch('https://driveher-backend.vercel.app/drivers/displayDrivers')
+  // .then(response => response.json())
+  // .then(data => {
+  //   if(data.result){
+
+  //   }
+  // })
+
+  const handleOrder = () => {
+    fetch(`https://driveher-backend.vercel.app/users/userCard/${user.token}`).then(response => response.json())
+    .then(data => {
+      if(data.result){
+        fetch(`https://paymentapi-one.vercel.app/cards/updateSolde/${data.userCard._id}`, {
+          method:'PUT',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({newSolde: (Number(data.userCard.solde) - user.price) }),
+        }).then(response => response.json())
+        .then(Paymentdata => {
+          if(Paymentdata.result){
+            console.log('Payement effectué avec succès');
+            navigation.navigate('Driver')
+          }
+        })
+
+      }
+    })
+  }
 
   return (
     <View style={styles.container}>
@@ -62,10 +92,10 @@ export default function OrderResumeScreen({ navigation }) {
 
       {/* <View style={styles.centeredView}> */}
       <MapView initialRegion={INITIAL_POSITION} style={styles.map}>
-        <Marker coordinate={user.departure} title="Départ" pinColor="green">
+        <Marker coordinate={user.departure} title="Départ">
           <Text style={styles.flag}>🚩</Text>
         </Marker>
-        <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow">
+        <Marker coordinate={user.arrival} title="Arrivée">
           <Text style={styles.flag}>🏁</Text>
         </Marker>
         <MapViewDirections
@@ -101,7 +131,7 @@ export default function OrderResumeScreen({ navigation }) {
         <TouchableOpacity style={styles.button} onPress={() => handleCancel()}>
           <Text style={styles.buttonText}>Précédent</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity onPress={() => handleOrder()} style={styles.button}>
           <Text style={styles.buttonText}>Réserver !</Text>
         </TouchableOpacity>
       </View>
