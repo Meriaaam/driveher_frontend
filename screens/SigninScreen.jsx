@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 //import { Octicons, Ionicons } from "@expo/vector-icons";
 import {
@@ -18,10 +18,19 @@ import { login } from "../reducers/user";
 import { Modal } from "react-native";
 
 export default function SigninScreen({ navigation }) {
+
+
+
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
 
+  useEffect(() => {
+    if(user.token){
+      navigation.navigate('TabNavigator')
+    }
+  },[]);
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);

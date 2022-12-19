@@ -22,6 +22,7 @@ export default function ProfileScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
   const [isEditable, setIsEditable] = useState(false);
+  const [canEdit, setCanEdit] =useState(false)
 
   const [firstName, setFirstName] = useState({ history: "", new: "" });
   const [lastName, setLastName] = useState({ history: "", new: "" });
@@ -33,6 +34,8 @@ export default function ProfileScreen({ navigation }) {
     setLastName({ ...lastName, new: lastName.history });
     setPhoneNumber({ ...phoneNumber, new: phoneNumber.history });
     setEmail({ ...email, new: email.history });
+    setCanEdit(false);
+    setIsEditable(false);
   }
   useEffect(() => {
     fetch(`https://driveher-backend.vercel.app/users/userData/${user.token}`)
@@ -65,10 +68,20 @@ export default function ProfileScreen({ navigation }) {
   }, []);
   // .catch((error) => console.log(error));
 
+  const handleEdit = () => {
+    setIsEditable(true);
+    setCanEdit(true);
+  };
+
+  const handleSave = () => {
+    setIsEditable(false);
+    setCanEdit(false);
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView style={styles.container}>
-        <Header />
+        <Header navigation={navigation} />
         <View>
           <Avatar.Image
             style={styles.avatar}
@@ -77,9 +90,7 @@ export default function ProfileScreen({ navigation }) {
           />
         </View>
           <TouchableOpacity
-            onPress={() => {
-              setIsEditable(true);
-            }}
+            onPress={() => handleEdit()}
           >
             <FontAwesome name="pencil" size={30} color="#BE355C" />
           </TouchableOpacity>
@@ -122,15 +133,15 @@ export default function ProfileScreen({ navigation }) {
           />
         </View>
 
-          <View style={styles.buttonContainer}>
+          {canEdit && <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => changeHistory()}>
               <FontAwesome name="rotate-left" size={30} color="#BE355C" />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setIsEditable(false)}>
+            <TouchableOpacity onPress={() => handleSave()}>
               <FontAwesome name="check" size={30} color="#73DDAA" />
             </TouchableOpacity>
-          </View>
+          </View>}
           {/* </TouchableOpacity> */}
       </KeyboardAvoidingView>
     </SafeAreaView>
