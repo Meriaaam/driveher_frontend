@@ -27,6 +27,7 @@ export default function SigninScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogin = () => {
+    console.log('hello');
     fetch("https://driveher-backend.vercel.app/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -34,13 +35,17 @@ export default function SigninScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if (data.result) {
+          console.log('hellotoo');
           dispatch(
             login({ token: data.user.token, firstname: data.user.firstName })
           );
           setEmail("");
           setPassword("");
-          navigation.navigate("TabNavigator", { screen: "HistoriqueScreen" });
+          console.log('hello3');
+          navigation.navigate("TabNavigator", { screen: "ProfileScreen" });
+          console.log('hello4');
         } else {
           setModalVisible(true);
         }

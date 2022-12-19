@@ -22,12 +22,13 @@ export default function ProfileScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
   const [isEditable, setIsEditable] = useState(false);
+// const [isView, setIsView] = useState(false)
 
   const [firstName, setFirstName] = useState({ history: "", new: "" });
   const [lastName, setLastName] = useState({ history: "", new: "" });
   const [phoneNumber, setPhoneNumber] = useState({ history: "", new: "" });
   const [email, setEmail] = useState({history: "", new: "" });
-
+  
   function changeHistory() {
     setFirstName({ ...firstName, new: firstName.history });
     setLastName({ ...lastName, new: lastName.history });
@@ -126,7 +127,7 @@ export default function ProfileScreen({ navigation }) {
             editable={isEditable}
           />
 
-          <View style={styles.buttonContainer}>
+          <View style={styles.buttonContainer} >
             <TouchableOpacity onPress={() => changeHistory()}>
               <FontAwesome name="rotate-left" size={30} color="#BE355C" />
             </TouchableOpacity>

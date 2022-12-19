@@ -174,7 +174,7 @@ export default function AccueilScreen({ navigation }) {
         />
       </View>
 
-      <MapView style={styles.map} initialRegion={INITIAL_POSITION}>
+      <MapView style={styles.map} initialRegion={INITIAL_POSITION} >
         <Marker
           coordinate={{
             latitude: user.latitude,
