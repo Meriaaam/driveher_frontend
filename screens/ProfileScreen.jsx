@@ -9,8 +9,8 @@ import {
   Alert,
   SafeAreaView,
 } from "react-native";
-import * as React from "react";
 import Header from "./Header";
+import * as React from "react";
 import { Avatar } from "react-native-paper";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
@@ -27,13 +27,13 @@ export default function ProfileScreen({ navigation }) {
   const [firstName, setFirstName] = useState({ history: "", new: "" });
   const [lastName, setLastName] = useState({ history: "", new: "" });
   const [phoneNumber, setPhoneNumber] = useState({ history: "", new: "" });
-  const [email, setEmail] = useState({history: "", new: "" });
-  
+  const [email, setEmail] = useState({ history: "", new: "" });
+
   function changeHistory() {
     setFirstName({ ...firstName, new: firstName.history });
     setLastName({ ...lastName, new: lastName.history });
     setPhoneNumber({ ...phoneNumber, new: phoneNumber.history });
-    setEmail({...email, new: email.history})
+    setEmail({ ...email, new: email.history });
   }
   useEffect(() => {
     fetch(`https://driveher-backend.vercel.app/users/userData/${user.token}`)
@@ -68,31 +68,24 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <Avatar.Image
-          style={styles.avatar}
-          size={100}
-          source={require("../assets/photo_profile.png")}
-        />
-        <View style={styles.inputContainer}>
+      <KeyboardAvoidingView style={styles.container}>
+        <Header />
+        <View>
+          <Avatar.Image
+            style={styles.avatar}
+            size={100}
+            source={require("../assets/photo_profile.png")}
+          />
+        </View>
           <TouchableOpacity
             onPress={() => {
               setIsEditable(true);
             }}
           >
             <FontAwesome name="pencil" size={30} color="#BE355C" />
-            {/* <Text style={styles.textButton}>Modifier</Text> */}
           </TouchableOpacity>
+        <View style={styles.inputContainer}>
 
-          {/* <TouchableOpacity
-        
-          // onPress={() => null}
-          // onFocus={() => this.setState({ bgColor: "green" })}
-          // onBlur={() => this.setState({ bgColor: "gray" })}
-        > */}
           <TextInput
             style={styles.input}
             placeholder="Prenom"
@@ -110,14 +103,16 @@ export default function ProfileScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Numero de telephone"
-            onChangeText={(value) => setPhoneNumber({ ...phoneNumber, new: value })}
+            onChangeText={(value) =>
+              setPhoneNumber({ ...phoneNumber, new: value })
+            }
             value={phoneNumber.new.toString()}
             editable={isEditable}
           />
           <TextInput
             style={styles.input}
             placeholder="Email"
-            onChangeText={(value) => setEmail({...email, new: value})}
+            onChangeText={(value) => setEmail({ ...email, new: value })}
             value={email.new}
             editable={isEditable}
           />
@@ -126,6 +121,7 @@ export default function ProfileScreen({ navigation }) {
             placeholder="Adresse favorite"
             editable={isEditable}
           />
+        </View>
 
           <View style={styles.buttonContainer} >
             <TouchableOpacity onPress={() => changeHistory()}>
@@ -137,7 +133,6 @@ export default function ProfileScreen({ navigation }) {
             </TouchableOpacity>
           </View>
           {/* </TouchableOpacity> */}
-        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -147,21 +142,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
 
   inputContainer: {
-    width: "80%",
+    width: "100%",
+    height:'50%',
     // flexDirection: "column",
     borderBottomColor: "#BE355C",
-    //alignItems: "center",
+    alignItems: "center",
     // justifyContent: "center",
     //     // backgroundColor: '#fbe29c',
   },
 
   input: {
     width: "80%",
-    height: "10%",
+    padding:10,
+    // height: "10%",
     marginTop: 5,
     borderBottomColor: "#BE355C",
     borderBottomWidth: 1,
@@ -173,12 +170,11 @@ const styles = StyleSheet.create({
 
   avatar: {
     marginTop: 40,
-    marginBottom: 40,
+    marginBottom: 30,
   },
 
   buttonContainer: {
-    width: 300,
-    marginTop: 50,
+    width: '100%',
     flexDirection: "row",
     justifyContent: "space-around",
   },

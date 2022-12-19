@@ -51,15 +51,23 @@ export default function OrderResumeScreen({ navigation }) {
     longitudeDelta: LONGITUDE_DELTA,
   };
 
-  console.log('user', user);
+  const handleCancel = () => {
+    dispatch(removeItinery());
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
 
       {/* <View style={styles.centeredView}> */}
       <MapView initialRegion={INITIAL_POSITION} style={styles.map}>
-        <Marker coordinate={user.departure} title="Départ" pinColor="green" />
-        <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow" />
+        <Marker coordinate={user.departure} title="Départ" pinColor="green">
+          <Text style={styles.flag}>🚩</Text>
+        </Marker>
+        <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow">
+          <Text style={styles.flag}>🏁</Text>
+        </Marker>
         <MapViewDirections
           origin={user.departure}
           destination={user.arrival}
@@ -70,38 +78,30 @@ export default function OrderResumeScreen({ navigation }) {
         />
       </MapView>
       <View style={styles.textBlock}>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Départ : </Text>
           {user.departureAddress}
         </Text>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Destination : </Text>
           {user.arrivalAddress}
         </Text>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Temps estimé : </Text> {user.time}{' '}
           minutes
         </Text>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Distance : </Text> {user.distance} km
         </Text>
-        <Text>
+        <Text style={styles.text}>
           <Text style={styles.textStyle}>Prix : </Text> {user.price} €
         </Text>
       </View>
       <View style={styles.buttonsBlock}>
-        <TouchableOpacity style={styles.button}>
-          <Text
-            onPress={() => {
-              dispatch(removeItinery());
-              navigation.navigate('Accueil');
-            }}
-            style={styles.buttonText}
-          >
-            Précédent
-          </Text>
+        <TouchableOpacity style={styles.button} onPress={() => handleCancel()}>
+          <Text style={styles.buttonText}>Précédent</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.button}>
+        <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Réserver !</Text>
         </TouchableOpacity>
       </View>
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
   buttonsBlock: {
     width: '100%',
-    marginTop: 50,
+    marginTop: 30,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
@@ -156,9 +156,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   textBlock: {
+    width: '100%',
+    paddingLeft: 20,
     alignItems: 'flex-start',
   },
   textStyle: {
     fontWeight: 'bold',
+  },
+  text: {
+    marginTop: 15,
+    fontSize: 18,
+  },
+  flag: {
+    fontSize: 30,
   },
 });

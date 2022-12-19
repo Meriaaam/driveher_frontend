@@ -43,9 +43,7 @@ export default function SigninScreen({ navigation }) {
           );
           setEmail("");
           setPassword("");
-          console.log('hello3');
-          navigation.navigate("TabNavigator", { screen: "ProfileScreen" });
-          console.log('hello4');
+          navigation.navigate("TabNavigator", {screen: 'AccueilScreen'} );
         } else {
           setModalVisible(true);
         }

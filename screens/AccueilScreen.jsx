@@ -22,7 +22,7 @@ import { useState, useEffect } from 'react';
 export default function AccueilScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-
+  console.log('user', user);
   const [driversPosition, setDriversPosition] = useState([]);
   const [departure, setDeparture] = useState('');
   const [arrival, setArrival] = useState('');
@@ -63,8 +63,9 @@ export default function AccueilScreen({ navigation }) {
         key={i}
         coordinate={{ latitude: data.latitude, longitude: data.longitude }}
         title={data.firstName}
-        pinColor="hotpink"
-      />
+      >
+        <Text>🚗</Text>
+      </Marker>
     );
   });
   const handleDepart = async () => {
@@ -181,7 +182,9 @@ export default function AccueilScreen({ navigation }) {
             longitude: user.longitude,
           }}
           title="My Position"
-        />
+        >
+          <Text style={styles.flag}>🚩</Text>
+        </Marker>
         {drivers}
       </MapView>
       <View style={styles.btnContainer}>
@@ -200,7 +203,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
   logoContainer: {
     width: '100%',
@@ -225,14 +228,14 @@ const styles = StyleSheet.create({
     width: '70%',
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
-    padding: 10,
+    padding: 15,
   },
   map: {
     width: '100%',
     height: '45%',
   },
   btnContainer: {
-    marginTop: 20,
+    marginTop: 35,
     width: '90%',
     flexDirection: 'row',
     alignItems: 'center',
@@ -249,6 +252,9 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  flag: {
+    fontSize: 30,
   },
 });
 
