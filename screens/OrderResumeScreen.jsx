@@ -51,10 +51,10 @@ export default function OrderResumeScreen({ navigation }) {
     longitudeDelta: LONGITUDE_DELTA,
   };
 
-  const handleCancel = () =>  {
-      dispatch(removeItinery());
-      navigation.navigate('Accueil');
-  }
+  const handleCancel = () => {
+    dispatch(removeItinery());
+    navigation.navigate('Accueil');
+  };
 
   console.log('user', user);
   return (
@@ -63,8 +63,12 @@ export default function OrderResumeScreen({ navigation }) {
 
       {/* <View style={styles.centeredView}> */}
       <MapView initialRegion={INITIAL_POSITION} style={styles.map}>
-        <Marker coordinate={user.departure} title="Départ" pinColor="green" />
-        <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow" />
+        <Marker coordinate={user.departure} title="Départ" pinColor="green">
+          <Text style={styles.flag}>🚩</Text>
+        </Marker>
+        <Marker coordinate={user.arrival} title="Arrivée" pinColor="yellow">
+          <Text style={styles.flag}>🏁</Text>
+        </Marker>
         <MapViewDirections
           origin={user.departure}
           destination={user.arrival}
@@ -95,16 +99,10 @@ export default function OrderResumeScreen({ navigation }) {
         </Text>
       </View>
       <View style={styles.buttonsBlock}>
-        <TouchableOpacity style={styles.button}
-          onPress={() => handleCancel() }
-          >
-          <Text
-            style={styles.buttonText}
-          >
-            Précédent
-          </Text>
+        <TouchableOpacity style={styles.button} onPress={() => handleCancel()}>
+          <Text style={styles.buttonText}>Précédent</Text>
         </TouchableOpacity>
-        <TouchableOpacity  style={styles.button}>
+        <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Réserver !</Text>
         </TouchableOpacity>
       </View>
@@ -159,16 +157,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   textBlock: {
-    width:'100%',
-    paddingLeft:20,
+    width: '100%',
+    paddingLeft: 20,
     alignItems: 'flex-start',
   },
   textStyle: {
     fontWeight: 'bold',
   },
-  text:{
-    marginTop:15,
-    fontSize:18
-
-  }
+  text: {
+    marginTop: 15,
+    fontSize: 18,
+  },
+  flag: {
+    fontSize: 30,
+  },
 });
