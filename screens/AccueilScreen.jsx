@@ -9,7 +9,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
+  SafeAreaView,
 } from 'react-native';
+
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { GOOGLE_API_KEY } from '@env';
 // import React from 'react';
 
 import MapView, { Marker } from 'react-native-maps';
@@ -17,15 +21,16 @@ import * as Location from 'expo-location';
 import Header from './Header';
 import { addItinery, setCurrentPosition } from '../reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function AccueilScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  console.log('user', user);
+
   const [driversPosition, setDriversPosition] = useState([]);
-  const [departure, setDeparture] = useState('');
-  const [arrival, setArrival] = useState('');
+
+  const departureRef = useRef();
+  const arrivalRef = useRef();
 
   useEffect(() => {
     (async () => {
@@ -69,6 +74,12 @@ export default function AccueilScreen({ navigation }) {
     );
   });
   const handleDepart = async () => {
+    const departure = departureRef.current?.getAddressText();
+    const arrival = arrivalRef.current?.getAddressText();
+
+    const clearDeparture = departureRef.current?.clear();
+    const clearArrival = arrivalRef.current?.clear();
+
     const departPlace = {};
     const arrivalPlace = {};
     var dist = 0;
@@ -82,7 +93,7 @@ export default function AccueilScreen({ navigation }) {
 
         (departPlace.latitude = departData.geometry.coordinates[1]),
           (departPlace.longitude = departData.geometry.coordinates[0]),
-          setDeparture('');
+          clearDeparture;
       });
     await fetch(`https://api-adresse.data.gouv.fr/search/?q=${arrival}`)
       .then((res) => res.json())
@@ -90,7 +101,7 @@ export default function AccueilScreen({ navigation }) {
         const arrivalData = data.features[0];
         (arrivalPlace.latitude = arrivalData.geometry.coordinates[1]),
           (arrivalPlace.longitude = arrivalData.geometry.coordinates[0]),
-          setArrival('');
+          clearArrival;
       });
 
     /* fonction de calcul d'une distance
@@ -140,11 +151,6 @@ export default function AccueilScreen({ navigation }) {
     navigation.navigate('Order');
   };
 
-  const handleCancel = () => {
-    setDeparture('');
-    setArrival('');
-  };
-
   const { width, height } = Dimensions.get('window');
 
   const ASPECT_RATIO = width / height;
@@ -160,22 +166,81 @@ export default function AccueilScreen({ navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header navigation={navigation} />
-      <View style={styles.formContainer}>
-        <TextInput
-          onChangeText={(value) => setDeparture(value)}
-          value={departure}
-          style={styles.input}
-          placeholder="Départ"
-        />
-        <TextInput
-          onChangeText={(value) => setArrival(value)}
-          value={arrival}
-          style={styles.input}
-          placeholder="Destination"
-        />
-      </View>
 
       <MapView style={styles.map} initialRegion={INITIAL_POSITION}>
+        <GooglePlacesAutocomplete
+          placeholder="Départ"
+          query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
+          enablePoweredByContainer={false}
+          //onPress={(data, details = null) => console.log(data, details)}
+          onFail={(error) => console.log(error)}
+          onNotFound={() => console.log('no results')}
+          // listEmptyComponent={() => (
+          //   <View style={{ flex: 1 }}>
+          //     <Text>Adresse invalide</Text>
+          //   </View>
+          // )}
+          styles={{
+            textInputContainer: {
+              backgroundColor: 'grey',
+              justifyContent: 'center',
+            },
+            textInput: {
+              top: 50,
+              width: '80%',
+              position: 'absolute',
+              height: 55,
+              color: '#73DDAA',
+              fontSize: 16,
+            },
+            listView: {
+              position: 'absolute',
+              top: 180,
+              width: '100%',
+            },
+            predefinedPlacesDescription: {
+              color: '#1faadb',
+            },
+          }}
+          ref={departureRef}
+        />
+
+        <GooglePlacesAutocomplete
+          placeholder="Destination"
+          query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
+          enablePoweredByContainer={false}
+          //onPress={(data, details = null) => console.log(data, details)}
+          onFail={(error) => console.log(error)}
+          onNotFound={() => console.log('no results')}
+          // listEmptyComponent={() => (
+          //   <View style={{ flex: 1 }}>
+          //     <Text>Adresse invalide</Text>
+          //   </View>
+          // )}
+          styles={{
+            textInputContainer: {
+              backgroundColor: 'grey',
+              justifyContent: 'center',
+            },
+            textInput: {
+              top: 120,
+              width: '80%',
+              position: 'absolute',
+              height: 55,
+              color: '#73DDAA',
+              fontSize: 16,
+            },
+            listView: {
+              bottom: 220,
+              width: '100%',
+            },
+            predefinedPlacesDescription: {
+              color: '#1faadb',
+            },
+          }}
+          ref={arrivalRef}
+        />
+
         <Marker
           coordinate={{
             latitude: user.latitude,
@@ -188,9 +253,9 @@ export default function AccueilScreen({ navigation }) {
         {drivers}
       </MapView>
       <View style={styles.btnContainer}>
-        <TouchableOpacity onPress={() => handleCancel()} style={styles.button}>
+        {/* <TouchableOpacity onPress={() => handleCancel()} style={styles.button}>
           <Text style={styles.btnText}>Annuler</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={() => handleDepart()} style={styles.button}>
           <Text style={styles.btnText}>C'est parti!</Text>
         </TouchableOpacity>
@@ -224,17 +289,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
-  input: {
-    width: '70%',
-    borderBottomColor: 'grey',
-    borderBottomWidth: 1,
-    padding: 15,
-  },
+  // input: {
+  //   width: '70%',
+  //   borderBottomColor: 'grey',
+  //   borderBottomWidth: 1,
+  //   padding: 15,
+  // },
   map: {
+    position: 'relative',
     width: '100%',
-    height: '45%',
+    height: '100%',
   },
   btnContainer: {
+    position: 'absolute',
+    top: '85%',
     marginTop: 35,
     width: '90%',
     flexDirection: 'row',
@@ -256,5 +324,4 @@ const styles = StyleSheet.create({
   flag: {
     fontSize: 30,
   },
- 
 });

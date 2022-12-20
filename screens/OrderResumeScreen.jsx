@@ -55,7 +55,7 @@ export default function OrderResumeScreen({ navigation }) {
 
   const handleCancel = () => {
     dispatch(removeItinery());
-    navigation.goBack()
+    navigation.goBack();
   };
 
   // fetch('https://driveher-backend.vercel.app/drivers/displayDrivers')
@@ -67,24 +67,30 @@ export default function OrderResumeScreen({ navigation }) {
   // })
 
   const handleOrder = () => {
-    fetch(`https://driveher-backend.vercel.app/users/userCard/${user.token}`).then(response => response.json())
-    .then(data => {
-      if(data.result){
-        fetch(`https://paymentapi-one.vercel.app/cards/updateSolde/${data.userCard._id}`, {
-          method:'PUT',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({newSolde: (Number(data.userCard.solde) - user.price) }),
-        }).then(response => response.json())
-        .then(Paymentdata => {
-          if(Paymentdata.result){
-            console.log('Payement effectué avec succès');
-            navigation.navigate('Driver')
-          }
-        })
-
-      }
-    })
-  }
+    fetch(`https://driveher-backend.vercel.app/users/userCard/${user.token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          fetch(
+            `https://paymentapi-one.vercel.app/cards/updateSolde/${data.userCard._id}`,
+            {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                newSolde: Number(data.userCard.solde) - user.price,
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((Paymentdata) => {
+              if (Paymentdata.result) {
+                console.log('Payement effectué avec succès');
+                navigation.navigate('Driver');
+              }
+            });
+        }
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -92,10 +98,10 @@ export default function OrderResumeScreen({ navigation }) {
 
       {/* <View style={styles.centeredView}> */}
       <MapView initialRegion={INITIAL_POSITION} style={styles.map}>
-        <Marker coordinate={user.departure} title="Départ">
+        <Marker coordinate={user.departure} title={user.departureAddress}>
           <Text style={styles.flag}>🚩</Text>
         </Marker>
-        <Marker coordinate={user.arrival} title="Arrivée">
+        <Marker coordinate={user.arrival} title={user.arrivalAddress}>
           <Text style={styles.flag}>🏁</Text>
         </Marker>
         <MapViewDirections
