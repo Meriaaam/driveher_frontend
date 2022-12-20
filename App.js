@@ -20,6 +20,7 @@ import SignupScreen from './screens/SignupScreen';
 import { Provider } from 'react-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
+import driver from './reducers/driver';
 
 // redux-persist 
 import { persistStore, persistReducer } from 'redux-persist';
@@ -29,7 +30,7 @@ import PaymentScreen from './screens/PaymentScreen';
 
 
 // ________________STORE CONFIGURATION_________________________
-const reducers = combineReducers({ user });
+const reducers = combineReducers({ user, driver });
 const persistConfig = {
   key: 'driveher',
   storage: AsyncStorage,

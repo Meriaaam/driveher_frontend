@@ -4,20 +4,21 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-} from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import React from 'react';
-import { removeItinery } from '../reducers/user';
-import { useSelector, useDispatch } from 'react-redux';
-import { GOOGLE_API_KEY } from '@env';
-import MapViewDirections from 'react-native-maps-directions';
-import { useState } from 'react';
-import Header from './Header';
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import React from "react";
+import { removeItinery } from "../reducers/user";
+import { useSelector, useDispatch } from "react-redux";
+import { GOOGLE_API_KEY } from "@env";
+import MapViewDirections from "react-native-maps-directions";
+import { useState, useEffect } from "react";
+import Header from "./Header";
+import { addDriver } from "../reducers/driver";
 
 export default function OrderResumeScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  // const [driversData, setDriversData] = useState([])
+  const [driversData, setDriversData] = useState([]);
 
   /** fonction qui met à jour
    * la latitude delta selon la distance de
@@ -42,7 +43,7 @@ export default function OrderResumeScreen({ navigation }) {
     return latDelta;
   }
 
-  const { width, height } = Dimensions.get('window');
+  const { width, height } = Dimensions.get("window");
   const ASPECT_RATIO = width / height;
   const LATITUDE_DELTA = setLatDelta(user.distance);
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
@@ -55,36 +56,94 @@ export default function OrderResumeScreen({ navigation }) {
 
   const handleCancel = () => {
     dispatch(removeItinery());
-    navigation.goBack()
+    navigation.goBack();
   };
 
-  // fetch('https://driveher-backend.vercel.app/drivers/displayDrivers')
-  // .then(response => response.json())
-  // .then(data => {
-  //   if(data.result){
+  // GET DRIVERS FROM DATABASE
+  useEffect(() => {
+    fetch("https://driveher-backend.vercel.app/drivers/displayDrivers")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          setDriversData(data.drivers);
+        }
+      });
+  }, []);
 
-  //   }
-  // })
+  var dist = 0;
+
+  // CALCULATE DISTANCE FUNCTION
+  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1); // deg2rad below
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    dist = d.toFixed(2);
+    return dist;
+  }
+
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
+
+  // FIND THE CLOSEST DRIVER
+  let result = [];
+  let shortestDistance;
+  let closestDriverIndex;
+  let closestDriver;
+  for (const driver of driversData) {
+    result.push(
+      getDistanceFromLatLonInKm(
+        user.departure.latitude,
+        user.departure.longitude,
+        driver.latitude,
+        driver.longitude
+      )
+    );
+  }
+
+  shortestDistance = result[0];
+  for (const dist of result) {
+    if (dist < shortestDistance) {
+      shortestDistance = dist;
+      closestDriverIndex = result.indexOf(dist);
+    }
+  }
+
+  closestDriver = driversData[closestDriverIndex];
 
   const handleOrder = () => {
-    fetch(`https://driveher-backend.vercel.app/users/userCard/${user.token}`).then(response => response.json())
-    .then(data => {
-      if(data.result){
-        fetch(`https://paymentapi-one.vercel.app/cards/updateSolde/${data.userCard._id}`, {
-          method:'PUT',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({newSolde: (Number(data.userCard.solde) - user.price) }),
-        }).then(response => response.json())
-        .then(Paymentdata => {
-          if(Paymentdata.result){
-            console.log('Payement effectué avec succès');
-            navigation.navigate('Driver')
-          }
-        })
-
-      }
-    })
-  }
+    fetch(`https://driveher-backend.vercel.app/users/userCard/${user.token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          fetch(
+            `https://paymentapi-one.vercel.app/cards/updateSolde/${data.userCard._id}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                newSolde: Number(data.userCard.solde) - user.price,
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((Paymentdata) => {
+              if (Paymentdata.result) {
+                dispatch(addDriver(closestDriver));
+                navigation.navigate("Driver");
+              }
+            });
+        }
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -117,7 +176,7 @@ export default function OrderResumeScreen({ navigation }) {
           {user.arrivalAddress}
         </Text>
         <Text style={styles.text}>
-          <Text style={styles.textStyle}>Temps estimé : </Text> {user.time}{' '}
+          <Text style={styles.textStyle}>Temps estimé : </Text> {user.time}{" "}
           minutes
         </Text>
         <Text style={styles.text}>
@@ -144,12 +203,12 @@ export default function OrderResumeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   input: {
     width: 250,
-    borderBottomColor: '#ec6e5b',
+    borderBottomColor: "#ec6e5b",
     borderBottomWidth: 1,
     fontSize: 16,
     paddingBottom: 5,
@@ -160,38 +219,38 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   centeredView: {
-    width: '100%',
-    height: '40%',
-    alignItems: 'center',
+    width: "100%",
+    height: "40%",
+    alignItems: "center",
   },
   map: {
     width: 400,
     height: 400,
   },
   button: {
-    backgroundColor: '#BE355C',
-    alignItems: 'center',
-    width: '40%',
+    backgroundColor: "#BE355C",
+    alignItems: "center",
+    width: "40%",
     padding: 15,
     borderRadius: 7,
   },
   buttonsBlock: {
-    width: '100%',
+    width: "100%",
     marginTop: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
   },
   textBlock: {
-    width: '100%',
+    width: "100%",
     paddingLeft: 20,
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
   textStyle: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   text: {
     marginTop: 15,
