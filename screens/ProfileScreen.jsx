@@ -79,71 +79,69 @@ export default function ProfileScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView style={styles.container}>
-        <Header navigation={navigation} />
-        <View>
-          <Avatar.Image
-            style={styles.avatar}
-            size={100}
-            source={require('../assets/photo_profile.png')}
-          />
-        </View>
-        <TouchableOpacity onPress={() => handleEdit()}>
-          <FontAwesome name="pencil" size={30} color="#BE355C" />
-        </TouchableOpacity>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Prenom"
-            onChangeText={(value) => setFirstName({ ...firstName, new: value })}
-            value={firstName.new}
-            editable={isEditable}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Nom"
-            onChangeText={(value) => setLastName({ ...lastName, new: value })}
-            value={lastName.new}
-            editable={isEditable}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Numero de telephone"
-            onChangeText={(value) =>
-              setPhoneNumber({ ...phoneNumber, new: value })
-            }
-            value={phoneNumber.new.toString()}
-            editable={isEditable}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            onChangeText={(value) => setEmail({ ...email, new: value })}
-            value={email.new}
-            editable={isEditable}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Adresse favorite"
-            editable={isEditable}
-          />
-        </View>
+    <KeyboardAvoidingView style={styles.container}>
+      <Header navigation={navigation} />
+      <View>
+        <Avatar.Image
+          style={styles.avatar}
+          size={100}
+          source={require('../assets/photo_profile.png')}
+        />
+      </View>
+      <TouchableOpacity onPress={() => handleEdit()}>
+        <FontAwesome name="pencil" size={30} color="#BE355C" />
+      </TouchableOpacity>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Prenom"
+          onChangeText={(value) => setFirstName({ ...firstName, new: value })}
+          value={firstName.new}
+          editable={isEditable}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Nom"
+          onChangeText={(value) => setLastName({ ...lastName, new: value })}
+          value={lastName.new}
+          editable={isEditable}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Numero de telephone"
+          onChangeText={(value) =>
+            setPhoneNumber({ ...phoneNumber, new: value })
+          }
+          value={phoneNumber.new.toString()}
+          editable={isEditable}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          onChangeText={(value) => setEmail({ ...email, new: value })}
+          value={email.new}
+          editable={isEditable}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Adresse favorite"
+          editable={isEditable}
+        />
+      </View>
 
-        {canEdit && (
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => changeHistory()}>
-              <FontAwesome name="rotate-left" size={30} color="#BE355C" />
-            </TouchableOpacity>
+      {canEdit && (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => changeHistory()}>
+            <FontAwesome name="rotate-left" size={30} color="#BE355C" />
+          </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => handleSave()}>
-              <FontAwesome name="check" size={30} color="#73DDAA" />
-            </TouchableOpacity>
-          </View>
-        )}
-        {/* </TouchableOpacity> */}
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          <TouchableOpacity onPress={() => handleSave()}>
+            <FontAwesome name="check" size={30} color="#73DDAA" />
+          </TouchableOpacity>
+        </View>
+      )}
+      {/* </TouchableOpacity> */}
+    </KeyboardAvoidingView>
   );
 }
 

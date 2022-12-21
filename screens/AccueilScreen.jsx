@@ -165,8 +165,7 @@ export default function AccueilScreen({ navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header navigation={navigation} />
-
-      <MapView style={styles.map} initialRegion={INITIAL_POSITION}>
+      <View style={StyleSheet.absoluteFillObject}>
         <GooglePlacesAutocomplete
           placeholder="Départ"
           query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
@@ -174,18 +173,13 @@ export default function AccueilScreen({ navigation }) {
           //onPress={(data, details = null) => console.log(data, details)}
           onFail={(error) => console.log(error)}
           onNotFound={() => console.log('no results')}
-          // listEmptyComponent={() => (
-          //   <View style={{ flex: 1 }}>
-          //     <Text>Adresse invalide</Text>
-          //   </View>
-          // )}
           styles={{
             textInputContainer: {
               backgroundColor: 'grey',
               justifyContent: 'center',
             },
             textInput: {
-              top: 50,
+              top: 170,
               width: '80%',
               position: 'absolute',
               height: 55,
@@ -211,18 +205,13 @@ export default function AccueilScreen({ navigation }) {
           //onPress={(data, details = null) => console.log(data, details)}
           onFail={(error) => console.log(error)}
           onNotFound={() => console.log('no results')}
-          // listEmptyComponent={() => (
-          //   <View style={{ flex: 1 }}>
-          //     <Text>Adresse invalide</Text>
-          //   </View>
-          // )}
           styles={{
             textInputContainer: {
               backgroundColor: 'grey',
               justifyContent: 'center',
             },
             textInput: {
-              top: 120,
+              top: 170,
               width: '80%',
               position: 'absolute',
               height: 55,
@@ -239,7 +228,9 @@ export default function AccueilScreen({ navigation }) {
           }}
           ref={arrivalRef}
         />
+      </View>
 
+      <MapView style={styles.map} initialRegion={INITIAL_POSITION}>
         <Marker
           coordinate={{
             latitude: user.latitude,
@@ -295,9 +286,10 @@ const styles = StyleSheet.create({
   //   padding: 15,
   // },
   map: {
-    position: 'relative',
+    //position: 'relative',
     width: '100%',
     height: '100%',
+    zIndex: -1,
   },
   btnContainer: {
     position: 'absolute',
