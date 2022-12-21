@@ -146,7 +146,7 @@ export default function AccueilScreen({ navigation }) {
         time: time,
         price: price,
       })
-    );
+    ); 
     navigation.navigate("Order");
   };
 

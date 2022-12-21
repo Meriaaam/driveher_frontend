@@ -1,90 +1,78 @@
-import { Text, View, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 import React, { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Header from "./Header";
+import driver from "../reducers/driver";
 // import AnimatedInput from "react-native-animated-input";
 
-
-export default function RatingScreen({navigation}) {
+export default function RatingScreen({ navigation }) {
   const [star, setStar] = useState("");
   const [comment, setComment] = useState("");
   const [personalNote, setPersonalNote] = useState(0);
-  const [showInput, setShowInput] = useState(false);
-  const [valid, isValid] = useState(false);
-
+ 
   const handleRating = () => {
-    fetch("/route/to/post/addRating", {
+    fetch("https://driveher-backend.vercel.app/ratings/addRating", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        starRating: star,
+        starRating: personalNote,
         commentRating: comment,
+        textInput: comment, // Add this line to include the text input in the body of the request
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        if (data.result) {
+        // if (data.result) {
           setStar("");
-          setComment("");
-        }
+          setComment(""); // Reset the value of comment to an empty string
+          navigation.navigate('Accueil');
+        // }
       });
   };
-  
+
   const personalStar = [];
   for (let i = 0; i < 5; i++) {
-  personalStar.push(
-  <TouchableOpacity key={i} onPress={() => setPersonalNote(i + 1)}>
-    <Text>
-<FontAwesome
-name='star'
-size={24} color={i<personalNote?"gold":"#E1E1E1"}/>
-</Text>
- </TouchableOpacity>
-
- 
-  );
+    personalStar.push(
+      <TouchableOpacity key={i} onPress={() => setPersonalNote(i + 1)}>
+        <Text>
+          <FontAwesome
+            name="star"
+            size={24}
+            color={i < personalNote ? "gold" : "#E1E1E1"}
+          />
+        </Text>
+      </TouchableOpacity>
+    );
   }
 
- 
+  return (
+    <View style={styles.container}>
+      <Header />
+      <Text style={styles.titleRate}>Notez {driver.firstName} </Text>
+      <View style={styles.stars}>{personalStar}</View>
+      <Text style={styles.titleOpinion}>Ecrire un avis</Text>
 
-    return (
-      <View style={styles.container}>
-        <Header/>
-         <Text style={styles.titleRate}>Notez {} </Text>
-         <View style={styles.stars}>{personalStar}</View>
-         <Text style={styles.titleOpinion}>Ecrire un avis</Text>
-
-{/*          
-                 <TextInput
-  placeholder= " Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam, ab!"
-     onChangeText={(value) => setComment(value)}
-     value={comment}
-     style={styles.input}
-      /> */}
-
-{/* <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20 }}> */}
-     {/* {showInput&& <AnimatedInput */}
-     <TextInput
+      <TextInput
         placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam, ab!"
-        // valid={isValid}
-        // errorText="Error"
         onChangeText={(value) => setComment(value)}
         value={comment}
-        // styleLabel={{ fontWeight: "600" }}
-        // styleBodyContent={{ borderBottomWidth: 1.5 }}
         style={styles.input}
-        multiline={true}
+        multiline={true} 
         onSubmitEditing={handleRating}
-  returnKeyType="send"
-  padding={10}
-        
+        returnKeyType="send"
+        padding={10}
       />
-    {/* </View> */}
 
- <TouchableOpacity
+      <TouchableOpacity
         onPress={() => handleRating()}
         style={styles.button}
         activeOpacity={0.8}
@@ -94,76 +82,64 @@ size={24} color={i<personalNote?"gold":"#E1E1E1"}/>
     </View>
   );
 }
- 
-    
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    alignItems:'center',
-    // justifyContent:'flex-start',
-       backgroundColor: 'white',
+  container: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "white",
   },
 
+  stars: {
+    paddingTop: 10,
+    flexDirection: "row",
+    margin: 20,
+  },
 
-stars: {
-  paddingTop: 10,
-  flexDirection: 'row',
-  margin: 20,
-},
+  button: {
+    alignItems: "center",
+    padding: 10,
+    width: "80%",
+    marginTop: 100,
+    backgroundColor: "#BE355C",
+    borderRadius: 10,
+    height: 50,
+    marginBottom: 50,
+  },
 
-button: {
-  alignItems: "center",
-  padding: 10,
-  width: "80%",
-  marginTop: 100,
-  backgroundColor: "#BE355C",
-  borderRadius: 10,
-  height: 50,
-  marginBottom: 50,
-},
+  textButton: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
 
-textButton: {
-  color: '#fff',
-  fontSize: 20,
-  fontWeight: 'bold',
-},
+  titleRate: {
+    paddingTop: 40,
+    fontSize: 30,
+    marginTop: 30,
+  },
 
+  titleOpinion: {
+    paddingTop: 50,
+    fontSize: 30,
+  },
 
-titleRate: {
-  paddingTop: 40,
-  fontSize: 30,
-  marginTop: 30,
-},
-
-
-titleOpinion: {
-  paddingTop: 50,
-  fontSize: 30,
-},
-
-input: {
-  width: '80%',
-  marginTop: 25,
-  // borderBottomColor: 'grey',
-  // borderBottomWidth: 1,
-  fontSize: 18,
-  flexDirection: "row",
-justifyContent: 'flex-start',
-  justifyContent: "center",
-  alignItems: "stretch",
-  borderRightWidth: 1,
-  borderLeftWidth: 1,
-  borderBottomWidth: 1,
-  borderTopWidth: 1,
-  height: 100,
-  borderColor: "#BE355C",
-  textAlignVertical: 'top',
-  width: '70%',
-  height: '20%',
-
-// borderStyle: 'dashed',
-},
-
+  input: {
+    width: "80%",
+    marginTop: 25,
+    fontSize: 18,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    justifyContent: "center",
+    alignItems: "stretch",
+    borderRightWidth: 1,
+    borderLeftWidth: 1,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    height: 100,
+    borderColor: "#BE355C",
+    textAlignVertical: "top",
+    width: "70%",
+    height: "20%",
+  },
 });
-
