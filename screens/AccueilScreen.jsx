@@ -14,7 +14,7 @@ import {
 
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_API_KEY } from '@env';
-// import React from 'react';
+import React from 'react';
 
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -165,8 +165,7 @@ export default function AccueilScreen({ navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header navigation={navigation} />
-
-      <MapView style={styles.map} initialRegion={INITIAL_POSITION}>
+      <View style={styles.inputContainer}>
         <GooglePlacesAutocomplete
           placeholder="Départ"
           query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
@@ -230,7 +229,8 @@ export default function AccueilScreen({ navigation }) {
               fontSize: 16,
             },
             listView: {
-              bottom: 220,
+              top: 190,
+              position: 'absolute',
               width: '100%',
             },
             predefinedPlacesDescription: {
@@ -239,7 +239,11 @@ export default function AccueilScreen({ navigation }) {
           }}
           ref={arrivalRef}
         />
-
+      </View>
+      <MapView
+        style={[styles.map, StyleSheet.absoluteFillObject]}
+        initialRegion={INITIAL_POSITION}
+      >
         <Marker
           coordinate={{
             latitude: user.latitude,
@@ -298,6 +302,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     height: '100%',
+    zIndex: -1,
   },
   btnContainer: {
     position: 'absolute',
@@ -322,5 +327,8 @@ const styles = StyleSheet.create({
   },
   flag: {
     fontSize: 30,
+  },
+  inputContainer: {
+    width: '100%',
   },
 });
