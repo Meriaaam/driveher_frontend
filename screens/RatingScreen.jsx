@@ -62,7 +62,7 @@ export default function RatingScreen({ navigation }) {
       <Text style={styles.titleOpinion}>Ecrire un avis</Text>
 
       <TextInput
-        placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam, ab!"
+        placeholder="Votre commentaire"
         onChangeText={(value) => setComment(value)}
         value={comment}
         style={styles.input}
