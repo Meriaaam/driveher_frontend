@@ -147,7 +147,7 @@ export default function AccueilScreen({ navigation }) {
         price: price,
       })
     ); 
-    navigation.navigate("Order");
+    navigation.navigate("Order"); 
   };
 
   const { width, height } = Dimensions.get('window');

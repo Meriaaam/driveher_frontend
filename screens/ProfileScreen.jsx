@@ -74,6 +74,19 @@ export default function ProfileScreen({ navigation }) {
   };
 
   const handleSave = () => {
+    fetch(`https://driveher-backend.vercel.app/users/updateUser/${user.token}`,
+{
+  method: 'PUT',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    firstName: firstName(data.users),
+    lastName: lastName(data.users),
+    email: email(data.users),
+    phoneNumber: phoneNumber(data.users),
+    
+}),
+})
+ 
     setIsEditable(false);
     setCanEdit(false);
   };
@@ -168,13 +181,15 @@ const styles = StyleSheet.create({
     width: '80%',
     padding: 10,
     // height: "10%",
-    marginTop: 5,
-    borderBottomColor: '#BE355C',
-    borderBottomWidth: 1,
-    // borderColor: "#BE355C",
-    // borderWidth: 1,
-    // borderRadius: 15,
+    marginTop: 10,
+    height: 60,
+    // borderBottomColor: '#BE355C',
+    // borderBottomWidth: 1,
+    borderColor: "#BE355C",
+    borderWidth: 1,
+    borderRadius: 10,
     fontSize: 18,
+          overflow: 'hidden',
   },
 
   avatar: {
