@@ -14,7 +14,7 @@ import {
 
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_API_KEY } from '@env';
-import React from 'react';
+// import React from 'react';
 
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -165,7 +165,8 @@ export default function AccueilScreen({ navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header navigation={navigation} />
-      <View style={styles.inputContainer}>
+
+      <MapView style={styles.map} initialRegion={INITIAL_POSITION}>
         <GooglePlacesAutocomplete
           placeholder="Départ"
           query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
@@ -173,13 +174,18 @@ export default function AccueilScreen({ navigation }) {
           //onPress={(data, details = null) => console.log(data, details)}
           onFail={(error) => console.log(error)}
           onNotFound={() => console.log('no results')}
+          // listEmptyComponent={() => (
+          //   <View style={{ flex: 1 }}>
+          //     <Text>Adresse invalide</Text>
+          //   </View>
+          // )}
           styles={{
             textInputContainer: {
               backgroundColor: 'grey',
               justifyContent: 'center',
             },
             textInput: {
-              top: 170,
+              top: 50,
               width: '80%',
               position: 'absolute',
               height: 55,
@@ -205,13 +211,18 @@ export default function AccueilScreen({ navigation }) {
           //onPress={(data, details = null) => console.log(data, details)}
           onFail={(error) => console.log(error)}
           onNotFound={() => console.log('no results')}
+          // listEmptyComponent={() => (
+          //   <View style={{ flex: 1 }}>
+          //     <Text>Adresse invalide</Text>
+          //   </View>
+          // )}
           styles={{
             textInputContainer: {
               backgroundColor: 'grey',
               justifyContent: 'center',
             },
             textInput: {
-              top: 170,
+              top: 120,
               width: '80%',
               position: 'absolute',
               height: 55,
@@ -219,8 +230,7 @@ export default function AccueilScreen({ navigation }) {
               fontSize: 16,
             },
             listView: {
-              top: 190,
-              position: 'absolute',
+              bottom: 220,
               width: '100%',
             },
             predefinedPlacesDescription: {
@@ -229,9 +239,7 @@ export default function AccueilScreen({ navigation }) {
           }}
           ref={arrivalRef}
         />
-      </View>
 
-      <MapView style={styles.map} initialRegion={INITIAL_POSITION}>
         <Marker
           coordinate={{
             latitude: user.latitude,
@@ -287,10 +295,9 @@ const styles = StyleSheet.create({
   //   padding: 15,
   // },
   map: {
-    //position: 'relative',
+    position: 'relative',
     width: '100%',
     height: '100%',
-    zIndex: -1,
   },
   btnContainer: {
     position: 'absolute',
@@ -315,8 +322,5 @@ const styles = StyleSheet.create({
   },
   flag: {
     fontSize: 30,
-  },
-  inputContainer: {
-    width: '100%',
   },
 });
