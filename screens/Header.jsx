@@ -10,12 +10,14 @@ export default function Header({ navigation }) {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigation.navigate("Signin");
+    navigation.navigate('Signin');
   };
 
   return (
     <View style={styles.logoContainer}>
-      <Text style={styles.welcomeText}>Bienvenu {user.firstname}</Text>
+      <Text style={styles.welcomeText}>
+        Bienvenue {user.firstname[0].toUpperCase() + user.firstname.slice(1)}
+      </Text>
       <TouchableOpacity>
         <FontAwesome
           onPress={() => handleLogout()}
@@ -30,12 +32,12 @@ export default function Header({ navigation }) {
 
 const styles = StyleSheet.create({
   logoContainer: {
-    width: "100%",
-    height: "15%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    backgroundColor: "#73DDAA",
+    width: '100%',
+    height: '15%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    backgroundColor: '#73DDAA',
     padding: 20,
   },
   welcomeText: {
