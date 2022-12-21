@@ -66,7 +66,7 @@ size={24} color={i<personalNote?"gold":"#E1E1E1"}/>
       /> */}
 
 {/* <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20 }}> */}
-     {showInput&& <AnimatedInput
+     {/* {showInput&& <AnimatedInput */}
      <TextInput
         placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam, ab!"
         // valid={isValid}
