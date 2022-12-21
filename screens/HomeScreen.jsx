@@ -21,7 +21,7 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity
           style={styles.startBtn}
           onPress={() => {
-            navigation.navigate('Signin');
+            navigation.navigate('Rating');
           }}
         >
           <Text style={styles.btnText}>Commencer </Text>

@@ -9,29 +9,29 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
-} from 'react-native';
+} from "react-native";
 // import React from 'react';
 
-import MapView, { Marker } from 'react-native-maps';
-import * as Location from 'expo-location';
-import Header from './Header';
-import { addItinery, setCurrentPosition } from '../reducers/user';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import MapView, { Marker } from "react-native-maps";
+import * as Location from "expo-location";
+import Header from "./Header";
+import { addItinery, setCurrentPosition } from "../reducers/user";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
 export default function AccueilScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  console.log('user', user);
+  console.log("user", user);
   const [driversPosition, setDriversPosition] = useState([]);
-  const [departure, setDeparture] = useState('');
-  const [arrival, setArrival] = useState('');
+  const [departure, setDeparture] = useState("");
+  const [arrival, setArrival] = useState("");
 
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
-      if (status === 'granted') {
+      if (status === "granted") {
         Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
           dispatch(setCurrentPosition(location.coords));
         });
@@ -40,7 +40,7 @@ export default function AccueilScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
-    fetch('https://driveher-backend.vercel.app/drivers/displayDrivers')
+    fetch("https://driveher-backend.vercel.app/drivers/displayDrivers")
       .then((res) => res.json())
       .then((data) => {
         const drivers = data.drivers.map((driver) => {
@@ -82,7 +82,7 @@ export default function AccueilScreen({ navigation }) {
 
         (departPlace.latitude = departData.geometry.coordinates[1]),
           (departPlace.longitude = departData.geometry.coordinates[0]),
-          setDeparture('');
+          setDeparture("");
       });
     await fetch(`https://api-adresse.data.gouv.fr/search/?q=${arrival}`)
       .then((res) => res.json())
@@ -90,7 +90,7 @@ export default function AccueilScreen({ navigation }) {
         const arrivalData = data.features[0];
         (arrivalPlace.latitude = arrivalData.geometry.coordinates[1]),
           (arrivalPlace.longitude = arrivalData.geometry.coordinates[0]),
-          setArrival('');
+          setArrival("");
       });
 
     /* fonction de calcul d'une distance
@@ -137,15 +137,15 @@ export default function AccueilScreen({ navigation }) {
         price: price,
       })
     );
-    navigation.navigate('Order');
+    navigation.navigate("Order");
   };
 
   const handleCancel = () => {
-    setDeparture('');
-    setArrival('');
+    setDeparture("");
+    setArrival("");
   };
 
-  const { width, height } = Dimensions.get('window');
+  const { width, height } = Dimensions.get("window");
 
   const ASPECT_RATIO = width / height;
   const LATITUDE_DELTA = 0.03;
@@ -175,7 +175,7 @@ export default function AccueilScreen({ navigation }) {
         />
       </View>
 
-      <MapView style={styles.map} initialRegion={INITIAL_POSITION} >
+      <MapView style={styles.map} initialRegion={INITIAL_POSITION}>
         <Marker
           coordinate={{
             latitude: user.latitude,
@@ -202,61 +202,58 @@ export default function AccueilScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   logoContainer: {
-    width: '100%',
-    height: '15%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#73DDAA',
+    width: "100%",
+    height: "15%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#73DDAA",
   },
   logo: {
     fontSize: 40,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     // fontFamily:'Verdana'
   },
   formContainer: {
-    width: '100%',
-    height: '20%',
-    alignItems: 'center',
+    width: "100%",
+    height: "20%",
+    alignItems: "center",
     marginTop: 20,
   },
   input: {
-    width: '70%',
-    borderBottomColor: 'grey',
+    width: "70%",
+    borderBottomColor: "grey",
     borderBottomWidth: 1,
     padding: 15,
   },
   map: {
-    width: '100%',
-    height: '45%',
+    width: "100%",
+    height: "45%",
   },
   btnContainer: {
     marginTop: 35,
-    width: '90%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    width: "90%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
   button: {
-    width: '42%',
-    backgroundColor: '#BE355C',
+    width: "42%",
+    backgroundColor: "#BE355C",
     padding: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 7,
   },
   btnText: {
-    color: '#FFF',
-    fontWeight: 'bold',
+    color: "#FFF",
+    fontWeight: "bold",
     fontSize: 18,
   },
   flag: {
     fontSize: 30,
   },
- 
 });
-
-
