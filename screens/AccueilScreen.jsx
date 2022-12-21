@@ -14,7 +14,7 @@ import {
 
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_API_KEY } from '@env';
-// import React from 'react';
+import React from 'react';
 
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -165,7 +165,7 @@ export default function AccueilScreen({ navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header navigation={navigation} />
-      <View style={StyleSheet.absoluteFillObject}>
+      <View style={styles.inputContainer}>
         <GooglePlacesAutocomplete
           placeholder="Départ"
           query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
@@ -219,7 +219,8 @@ export default function AccueilScreen({ navigation }) {
               fontSize: 16,
             },
             listView: {
-              bottom: 220,
+              top: 190,
+              position: 'absolute',
               width: '100%',
             },
             predefinedPlacesDescription: {
@@ -314,5 +315,8 @@ const styles = StyleSheet.create({
   },
   flag: {
     fontSize: 30,
+  },
+  inputContainer: {
+    width: '100%',
   },
 });

@@ -38,6 +38,15 @@ export default function YourDriverScreen({ navigation }) {
           </Text>
         </View>
       </View> 
+      <View style={styles.btnContainer}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.textBtn}>Contacter {driver.firstName} </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.textBtn}>Suivre {driver.firstName} </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -96,4 +105,22 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 40,
     borderStyle: 'dashed',
    },
+   btnContainer:{
+    width:'100%',
+    marginTop:50,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-evenly'
+   },
+   button:{
+    backgroundColor: '#BE355C',
+    padding:10,
+    borderRadius:7,
+    width: '40%',
+    alignItems:'center'
+   },
+   textBtn:{
+    color: '#fff',
+    fontWeight:'bold'
+   }
 });

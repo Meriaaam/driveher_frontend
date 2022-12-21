@@ -40,7 +40,9 @@ export default function SigninScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if (data.result) {
+          console.log("hellotoo");
           dispatch(
             login({ token: data.user.token, firstname: data.user.firstName })
           );
