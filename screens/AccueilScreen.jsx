@@ -170,14 +170,8 @@ export default function AccueilScreen({ navigation }) {
           placeholder="Départ"
           query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
           enablePoweredByContainer={false}
-          //onPress={(data, details = null) => console.log(data, details)}
           onFail={(error) => console.log(error)}
           onNotFound={() => console.log('no results')}
-          // listEmptyComponent={() => (
-          //   <View style={{ flex: 1 }}>
-          //     <Text>Adresse invalide</Text>
-          //   </View>
-          // )}
           styles={{
             textInputContainer: {
               backgroundColor: 'grey',
@@ -188,7 +182,6 @@ export default function AccueilScreen({ navigation }) {
               width: '80%',
               position: 'absolute',
               height: 55,
-              color: '#73DDAA',
               fontSize: 16,
             },
             listView: {
@@ -207,14 +200,8 @@ export default function AccueilScreen({ navigation }) {
           placeholder="Destination"
           query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
           enablePoweredByContainer={false}
-          //onPress={(data, details = null) => console.log(data, details)}
           onFail={(error) => console.log(error)}
           onNotFound={() => console.log('no results')}
-          // listEmptyComponent={() => (
-          //   <View style={{ flex: 1 }}>
-          //     <Text>Adresse invalide</Text>
-          //   </View>
-          // )}
           styles={{
             textInputContainer: {
               backgroundColor: 'grey',
@@ -225,7 +212,6 @@ export default function AccueilScreen({ navigation }) {
               width: '80%',
               position: 'absolute',
               height: 55,
-              color: '#73DDAA',
               fontSize: 16,
             },
             listView: {
@@ -256,9 +242,6 @@ export default function AccueilScreen({ navigation }) {
         {drivers}
       </MapView>
       <View style={styles.btnContainer}>
-        {/* <TouchableOpacity onPress={() => handleCancel()} style={styles.button}>
-          <Text style={styles.btnText}>Annuler</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity onPress={() => handleDepart()} style={styles.button}>
           <Text style={styles.btnText}>C'est parti!</Text>
         </TouchableOpacity>
@@ -292,12 +275,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
-  // input: {
-  //   width: '70%',
-  //   borderBottomColor: 'grey',
-  //   borderBottomWidth: 1,
-  //   padding: 15,
-  // },
   map: {
     position: 'relative',
     width: '100%',
