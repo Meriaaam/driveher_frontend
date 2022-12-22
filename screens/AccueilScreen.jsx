@@ -10,18 +10,18 @@ import {
   Platform,
   Dimensions,
   SafeAreaView,
-} from "react-native";
+} from 'react-native';
 
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { GOOGLE_API_KEY } from "@env";
-import React from "react";
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { GOOGLE_API_KEY } from '@env';
+import React from 'react';
 
-import MapView, { Marker } from "react-native-maps";
-import * as Location from "expo-location";
-import Header from "./Header";
-import { addItinery, setCurrentPosition } from "../reducers/user";
-import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect, useRef } from "react";
+import MapView, { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
+import Header from './Header';
+import { addItinery, setCurrentPosition } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useRef } from 'react';
 
 export default function AccueilScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -150,7 +150,7 @@ export default function AccueilScreen({ navigation }) {
     navigation.navigate('Order');
   };
 
-  const { width, height } = Dimensions.get("window");
+  const { width, height } = Dimensions.get('window');
 
   const ASPECT_RATIO = width / height;
   const LATITUDE_DELTA = 0.03;
@@ -168,35 +168,29 @@ export default function AccueilScreen({ navigation }) {
       <View style={styles.inputContainer}>
         <GooglePlacesAutocomplete
           placeholder="Départ"
-          query={{ key: GOOGLE_API_KEY, components: "country:fr" }}
+          query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
           enablePoweredByContainer={false}
-          //onPress={(data, details = null) => console.log(data, details)}
           onFail={(error) => console.log(error)}
-          onNotFound={() => console.log("no results")}
-          // listEmptyComponent={() => (
-          //   <View style={{ flex: 1 }}>
-          //     <Text>Adresse invalide</Text>
-          //   </View>
-          // )}
+          onNotFound={() => console.log('no results')}
           styles={{
             textInputContainer: {
-              backgroundColor: "grey",
-              justifyContent: "center",
+              backgroundColor: 'grey',
+              justifyContent: 'center',
             },
             textInput: {
               top: 50,
-              width: "80%",
-              position: "absolute",
+              width: '80%',
+              position: 'absolute',
               height: 55,
               fontSize: 16,
             },
             listView: {
-              position: "absolute",
+              position: 'absolute',
               top: 180,
-              width: "100%",
+              width: '100%',
             },
             predefinedPlacesDescription: {
-              color: "#1faadb",
+              color: '#1faadb',
             },
           }}
           ref={departureRef}
@@ -204,25 +198,19 @@ export default function AccueilScreen({ navigation }) {
 
         <GooglePlacesAutocomplete
           placeholder="Destination"
-          query={{ key: GOOGLE_API_KEY, components: "country:fr" }}
+          query={{ key: GOOGLE_API_KEY, components: 'country:fr' }}
           enablePoweredByContainer={false}
-          //onPress={(data, details = null) => console.log(data, details)}
           onFail={(error) => console.log(error)}
-          onNotFound={() => console.log("no results")}
-          // listEmptyComponent={() => (
-          //   <View style={{ flex: 1 }}>
-          //     <Text>Adresse invalide</Text>
-          //   </View>
-          // )}
+          onNotFound={() => console.log('no results')}
           styles={{
             textInputContainer: {
-              backgroundColor: "grey",
-              justifyContent: "center",
+              backgroundColor: 'grey',
+              justifyContent: 'center',
             },
             textInput: {
               top: 120,
-              width: "80%",
-              position: "absolute",
+              width: '80%',
+              position: 'absolute',
               height: 55,
               fontSize: 16,
             },
@@ -232,7 +220,7 @@ export default function AccueilScreen({ navigation }) {
               width: '100%',
             },
             predefinedPlacesDescription: {
-              color: "#1faadb",
+              color: '#1faadb',
             },
           }}
           ref={arrivalRef}
@@ -254,9 +242,6 @@ export default function AccueilScreen({ navigation }) {
         {drivers}
       </MapView>
       <View style={styles.btnContainer}>
-        {/* <TouchableOpacity onPress={() => handleCancel()} style={styles.button}>
-          <Text style={styles.btnText}>Annuler</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity onPress={() => handleDepart()} style={styles.button}>
           <Text style={styles.btnText}>C'est parti!</Text>
         </TouchableOpacity>
@@ -290,12 +275,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
-  // input: {
-  //   width: '70%',
-  //   borderBottomColor: 'grey',
-  //   borderBottomWidth: 1,
-  //   padding: 15,
-  // },
   map: {
     position: 'relative',
     width: '100%',
@@ -303,8 +282,8 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },
   btnContainer: {
-    position: "absolute",
-    top: "85%",
+    position: 'absolute',
+    top: '85%',
     marginTop: 35,
     width: '90%',
     flexDirection: 'row',

@@ -75,8 +75,23 @@ export default function ProfileScreen({ navigation }) {
   };
 
   const handleSave = () => {
-    setIsEditable(false);
-    setCanEdit(false);
+    console.log(firstName);
+    fetch(
+      `https://driveher-backend.vercel.app/users/updateUser/${user.token}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          phoneNumber: phoneNumber,
+        }),
+      }
+    ).then((data) => {
+      setIsEditable(false);
+      setCanEdit(false);
+    });
   };
 
   return (
@@ -86,13 +101,16 @@ export default function ProfileScreen({ navigation }) {
         <Avatar.Image
           style={styles.avatar}
           size={100}
-          source={require('../assets/photo_profile.png')}
+          source={require("../assets/photo_profile.png")}
         />
       </View>
       <TouchableOpacity onPress={() => handleEdit()}>
         <FontAwesome name="pencil" size={30} color="#BE355C" />
       </TouchableOpacity>
-      <ScrollView contentContainerStyle={{alignItems:'center'}} style={styles.inputContainer}>
+      <ScrollView
+        contentContainerStyle={{ alignItems: "center" }}
+        style={styles.inputContainer}
+      >
         <TextInput
           style={styles.input}
           placeholder="Prenom"
@@ -123,11 +141,11 @@ export default function ProfileScreen({ navigation }) {
           value={email.new}
           editable={isEditable}
         />
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="Adresse favorite"
           editable={isEditable}
-        />
+        /> */}
       </ScrollView>
 
       {canEdit && (
@@ -160,8 +178,7 @@ const styles = StyleSheet.create({
     paddingBottom:20,
     // flexDirection: "column",
     borderBottomColor: "#BE355C",
-    // alignItems: "center",
-  
+    // alignItems: 'center',
     // justifyContent: "center",
     //     // backgroundColor: '#fbe29c',
   },
@@ -177,6 +194,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderRadius: 15,
     fontSize: 18,
+    overflow: "hidden",
   },
 
   avatar: {
@@ -188,5 +206,5 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-around",
-  },
+  }
 });

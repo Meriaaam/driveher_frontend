@@ -21,6 +21,8 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity
           style={styles.startBtn}
           onPress={() => {
+            // navigation.navigate("TabNavigator",{screen: 'Profile'}); pour pouvoir naviguer entre les pages non parametrées dans APP
+            //navigation.navigate('Rating'); pour pouvoir naviguer entre les pages parametrées dans APP
             navigation.navigate("Signin");
           }}
         >
