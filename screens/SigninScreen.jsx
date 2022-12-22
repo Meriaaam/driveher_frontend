@@ -51,6 +51,9 @@ export default function SigninScreen({ navigation }) {
           navigation.navigate('TabNavigator', { screen: 'AccueilScreen' });
         } else {
           setModalVisible(true);
+          setTimeout(() => {
+            setModalVisible(false);
+           }, 5000);
         }
       })
       .catch((error) => console.log(error));
@@ -77,8 +80,10 @@ export default function SigninScreen({ navigation }) {
       </View>
 
       <Modal
-        animationType="slide"
+        animationType='fade'
         transparent={true}
+        
+        
         visible={modalVisible}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');

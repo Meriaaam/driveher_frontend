@@ -15,7 +15,7 @@ export default function RatingScreen({ navigation }) {
   const [star, setStar] = useState("");
   const [comment, setComment] = useState("");
   const [personalNote, setPersonalNote] = useState(0);
- 
+
   const handleRating = () => {
     fetch("https://driveher-backend.vercel.app/ratings/addRating", {
       method: "POST",
@@ -32,9 +32,9 @@ export default function RatingScreen({ navigation }) {
       .then((data) => {
         console.log(data);
         // if (data.result) {
-          setStar("");
-          setComment(""); // Reset the value of comment to an empty string
-          navigation.navigate('Accueil');
+        setStar("");
+        setComment(""); // Reset the value of comment to an empty string
+        navigation.navigate("TabNavigator", { screen: "Accueil" });
         // }
       });
   };
@@ -56,7 +56,7 @@ export default function RatingScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Header />
+      <Header navigation={navigation} />
       <Text style={styles.titleRate}>Notez {driver.firstName} </Text>
       <View style={styles.stars}>{personalStar}</View>
       <Text style={styles.titleOpinion}>Ecrire un avis</Text>
@@ -66,7 +66,7 @@ export default function RatingScreen({ navigation }) {
         onChangeText={(value) => setComment(value)}
         value={comment}
         style={styles.input}
-        multiline={true} 
+        multiline={true}
         onSubmitEditing={handleRating}
         returnKeyType="send"
         padding={10}
@@ -129,17 +129,12 @@ const styles = StyleSheet.create({
     marginTop: 25,
     fontSize: 18,
     flexDirection: "row",
-    justifyContent: "flex-start",
     justifyContent: "center",
     alignItems: "stretch",
-    borderRightWidth: 1,
-    borderLeftWidth: 1,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
+    borderWidth: 1,
     height: 100,
     borderColor: "#BE355C",
     textAlignVertical: "top",
     width: "70%",
-    height: "20%",
   },
 });

@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { logout } from '../reducers/user';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { logout } from "../reducers/user";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function Header({ navigation }) {
   const user = useSelector((state) => state.user.value);
@@ -15,7 +15,14 @@ export default function Header({ navigation }) {
 
   return (
     <View style={styles.logoContainer}>
-      <Text style={styles.welcomeText}>Bienvenu {user.firstname}</Text>
+      <Text
+        onPress={() =>
+          navigation.navigate("TabNavigator", { screen: "Accueil" })
+        }
+        style={styles.welcomeText}
+      >
+        Bienvenu {user.firstname}
+      </Text>
       <TouchableOpacity>
         <FontAwesome
           onPress={() => handleLogout()}
@@ -40,19 +47,19 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 30,
-    color: '#fff',
+    color: "#fff",
   },
   logo: {
     fontSize: 40,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     // fontFamily:'Verdana'
   },
   logoHomeContainer: {
-    width: '100%',
-    height: '18%',
-    backgroundColor: '#BE355C',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: "18%",
+    backgroundColor: "#BE355C",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

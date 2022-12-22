@@ -4,19 +4,21 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-} from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import React from 'react';
-import { removeItinery } from '../reducers/user';
-import { useSelector, useDispatch } from 'react-redux';
-import { GOOGLE_API_KEY } from '@env';
-import MapViewDirections from 'react-native-maps-directions';
-import { useState, useEffect } from 'react';
-import Header from './Header';
-import { addDriver } from '../reducers/driver';
+  Modal,
+  Pressable,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import React from "react";
+import { removeItinery } from "../reducers/user";
+import { useSelector, useDispatch } from "react-redux";
+import { GOOGLE_API_KEY } from "@env";
+import MapViewDirections from "react-native-maps-directions";
+import { useState, useEffect } from "react";
+import Header from "./Header";
+import { addDriver } from "../reducers/driver";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function OrderResumeScreen({ navigation }) {
-  console.log("GOOGLE_API_KEY", GOOGLE_API_KEY);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   const [driversData, setDriversData] = useState([]);
@@ -62,7 +64,7 @@ export default function OrderResumeScreen({ navigation }) {
 
   // GET DRIVERS FROM DATABASE
   useEffect(() => {
-    fetch('https://driveher-backend.vercel.app/drivers/displayDrivers')
+    fetch("https://driveher-backend.vercel.app/drivers/displayDrivers")
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
@@ -128,18 +130,37 @@ export default function OrderResumeScreen({ navigation }) {
           fetch(
             `https://paymentapi-one.vercel.app/cards/updateSolde/${data.userCard._id}`,
             {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 newSolde: Number(data.userCard.solde) - user.price,
               }),
             }
           )
             .then((response) => response.json())
-            .then((Paymentdata) => {
+            .then(async (Paymentdata) => {
               if (Paymentdata.result) {
-                dispatch(addDriver(closestDriver));
-                navigation.navigate('Driver');
+                await fetch(
+                  "https://driveher-backend.vercel.app/orders/newOrder",
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      token: user.token,
+                      departure: user.departureAddress,
+                      arrival: user.arrivalAddress,
+                      paymentAmount: user.price,
+                    }),
+                  }
+                )
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.result) {
+                      console.log("order enregistré");
+                      dispatch(addDriver(closestDriver));
+                      navigation.navigate("Driver");
+                    }
+                  });
               }
             });
         }
@@ -205,7 +226,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
   },
   input: {
     width: 250,
@@ -225,8 +246,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   map: {
-    width: 400,
-    height: 400,
+    width: "100%",
+    height: "45%",
   },
   button: {
     backgroundColor: "#BE355C",
@@ -254,7 +275,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   text: {
-    marginTop: 15,
+    marginTop: 10,
     fontSize: 18,
   },
   flag: {
