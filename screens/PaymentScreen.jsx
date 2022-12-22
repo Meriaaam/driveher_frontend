@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import Header from "./Header";
 import { RadioButton } from "react-native-paper";
@@ -6,9 +12,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-export default function PaymentScreen({navigation}) {
-
-  const user = useSelector(state => state.user.value)
+export default function PaymentScreen({ navigation }) {
+  const user = useSelector((state) => state.user.value);
 
   const [checked, setChecked] = useState("first");
   const [cardNumber, setCardNumber] = useState(null);
@@ -17,25 +22,25 @@ export default function PaymentScreen({navigation}) {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleValidate = () => {
-    console.log('hello');
+    console.log("hello");
     fetch(`https://driveher-backend.vercel.app/users/addCard/${user.token}`, {
-          method:'PUT',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cardNumber: cardNumber})
-        }).then(response => response.json())
-        .then(data => {
-          console.log(data);
-          if(data.result){
-            navigation.navigate('TabNavigator', {screen: 'AccueilScreen'})
-          }
-        })
-  }
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cardNumber: cardNumber }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.result) {
+          navigation.navigate("TabNavigator", { screen: "AccueilScreen" });
+        }
+      });
+  };
 
   const handleSkip = () => {
-    navigation.navigate('Accueil')
-  }
+    navigation.navigate("TabNavigator",{screen:"Accueil"});
+  };
 
-  
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
@@ -61,16 +66,29 @@ export default function PaymentScreen({navigation}) {
         <FontAwesome name="paypal" size={20} color="blue" style={styles.icon} />
       </View>
       <View style={styles.formContainer}>
-        <TextInput onChangeText={(value) => setCardNumber(value) } value={cardNumber} placeholder="Numéro de carte" keyboardType="numeric" style={styles.input} />
         <TextInput
-          placeholder="Expiration"
-          onChangeText={(value) => setExpiry(value) } value={expiry}
+          onChangeText={(value) => setCardNumber(value)}
+          value={cardNumber}
+          placeholder="Numéro de carte"
+          keyboardType="numeric"
           style={styles.input}
         />
-        <TextInput placeholder="CVV" onChangeText={(value) => setCvv(value) } value={cvv} keyboardType="numeric" style={styles.input} />
+        <TextInput
+          placeholder="Expiration"
+          onChangeText={(value) => setExpiry(value)}
+          value={expiry}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="CVV"
+          onChangeText={(value) => setCvv(value)}
+          value={cvv}
+          keyboardType="numeric"
+          style={styles.input}
+        />
       </View>
 
-      <View style={styles.btnContainer} >
+      <View style={styles.btnContainer}>
         <TouchableOpacity
           onPress={() => handleValidate()}
           style={styles.button}
@@ -80,7 +98,7 @@ export default function PaymentScreen({navigation}) {
           <Text style={styles.textButton}>Valider</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress = {() => handleSkip()}
+          onPress={() => handleSkip()}
           style={styles.button}
           activeOpacity={0.8}
         >
@@ -128,9 +146,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 
-  btnContainer:{
-    width:'100%',
-    alignItems:'center'
+  btnContainer: {
+    width: "100%",
+    alignItems: "center",
   },
 
   button: {
@@ -140,7 +158,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     backgroundColor: "#BE355C",
     borderRadius: 10,
-    
   },
   textButton: {
     color: "#ffffff",
