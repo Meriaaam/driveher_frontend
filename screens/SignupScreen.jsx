@@ -2,6 +2,7 @@ import { useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
   Button,
+  Image,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -26,6 +27,7 @@ export default function SigninScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [userExistsModalVisible, setUserExistsModalVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -158,13 +160,28 @@ export default function SigninScreen({ navigation }) {
           </View>
         )}
 
+<View style={styles.containerPassword}>
         <TextInput
           placeholder="Password"
           onChangeText={(value) => setPassword(value)}
           value={password}
           style={styles.input}
-          secureTextEntry={passwordVisible}
-        />
+          secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity
+            style={{ marginLeft: 300, marginTop: 40, position: "absolute" }}
+            onPress={() => setShowPassword(!showPassword)}
+          >
+            <Image
+              source={
+                showPassword
+                  ? require("../assets/eye-closed.jpg")
+                  : require("../assets/eye-open.jpg")
+              }
+              style={{ width: 20, height: 20 }}
+            />
+          </TouchableOpacity>
+          </View>
       </View>
       <Text>Vous avez déja un compte ?</Text>
 
@@ -283,5 +300,10 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: 10,
     fontSize: 18,
+  },
+  containerPassword: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });

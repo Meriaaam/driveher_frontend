@@ -8,15 +8,16 @@ import {
   TextInput,
   Alert,
   SafeAreaView,
-} from 'react-native';
-import Header from './Header';
-import * as React from 'react';
-import { Avatar } from 'react-native-paper';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+  ScrollView,
+} from "react-native";
+import Header from "./Header";
+import * as React from "react";
+import { Avatar } from "react-native-paper";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function ProfileScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
@@ -24,10 +25,10 @@ export default function ProfileScreen({ navigation }) {
   const [isEditable, setIsEditable] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
 
-  const [firstName, setFirstName] = useState({ history: '', new: '' });
-  const [lastName, setLastName] = useState({ history: '', new: '' });
-  const [phoneNumber, setPhoneNumber] = useState({ history: '', new: '' });
-  const [email, setEmail] = useState({ history: '', new: '' });
+  const [firstName, setFirstName] = useState({ history: "", new: "" });
+  const [lastName, setLastName] = useState({ history: "", new: "" });
+  const [phoneNumber, setPhoneNumber] = useState({ history: "", new: "" });
+  const [email, setEmail] = useState({ history: "", new: "" });
 
   function changeHistory() {
     setFirstName({ ...firstName, new: firstName.history });
@@ -74,21 +75,23 @@ export default function ProfileScreen({ navigation }) {
   };
 
   const handleSave = () => {
-    fetch(`https://driveher-backend.vercel.app/users/updateUser/${user.token}`,
-{
-  method: 'PUT',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    firstName: firstName(data.users),
-    lastName: lastName(data.users),
-    email: email(data.users),
-    phoneNumber: phoneNumber(data.users),
-    
-}),
-})
- 
-    setIsEditable(false);
-    setCanEdit(false);
+    console.log(firstName);
+    fetch(
+      `https://driveher-backend.vercel.app/users/updateUser/${user.token}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          phoneNumber: phoneNumber,
+        }),
+      }
+    ).then((data) => {
+      setIsEditable(false);
+      setCanEdit(false);
+    });
   };
 
   return (
@@ -98,13 +101,16 @@ export default function ProfileScreen({ navigation }) {
         <Avatar.Image
           style={styles.avatar}
           size={100}
-          source={require('../assets/photo_profile.png')}
+          source={require("../assets/photo_profile.png")}
         />
       </View>
       <TouchableOpacity onPress={() => handleEdit()}>
         <FontAwesome name="pencil" size={30} color="#BE355C" />
       </TouchableOpacity>
-      <View style={styles.inputContainer}>
+      <ScrollView
+        contentContainerStyle={{ alignItems: "center" }}
+        style={styles.inputContainer}
+      >
         <TextInput
           style={styles.input}
           placeholder="Prenom"
@@ -135,12 +141,12 @@ export default function ProfileScreen({ navigation }) {
           value={email.new}
           editable={isEditable}
         />
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="Adresse favorite"
           editable={isEditable}
-        />
-      </View>
+        /> */}
+      </ScrollView>
 
       {canEdit && (
         <View style={styles.buttonContainer}>
@@ -161,22 +167,22 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
 
   inputContainer: {
-    width: '100%',
-    height: '50%',
+    width: "100%",
+    height: "50%",
     // flexDirection: "column",
-    borderBottomColor: '#BE355C',
-    alignItems: 'center',
+    borderBottomColor: "#BE355C",
+    // alignItems: 'center',
     // justifyContent: "center",
     //     // backgroundColor: '#fbe29c',
   },
 
   input: {
-    width: '80%',
+    width: "80%",
     padding: 10,
     // height: "10%",
     marginTop: 10,
@@ -187,7 +193,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     fontSize: 18,
-          overflow: 'hidden',
+    overflow: "hidden",
   },
 
   avatar: {
@@ -196,8 +202,9 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 60,
   },
 });
