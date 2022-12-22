@@ -8,6 +8,7 @@ import {
   TextInput,
   Alert,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import Header from "./Header";
 import * as React from "react";
@@ -91,7 +92,7 @@ export default function ProfileScreen({ navigation }) {
       <TouchableOpacity onPress={() => handleEdit()}>
         <FontAwesome name="pencil" size={30} color="#BE355C" />
       </TouchableOpacity>
-      <View style={styles.inputContainer}>
+      <ScrollView contentContainerStyle={{alignItems:'center'}} style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           placeholder="Prenom"
@@ -127,7 +128,7 @@ export default function ProfileScreen({ navigation }) {
           placeholder="Adresse favorite"
           editable={isEditable}
         />
-      </View>
+      </ScrollView>
 
       {canEdit && (
         <View style={styles.buttonContainer}>
@@ -155,9 +156,12 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
     height: "50%",
+    paddingTop:20,
+    paddingBottom:20,
     // flexDirection: "column",
     borderBottomColor: "#BE355C",
-    alignItems: "center",
+    // alignItems: "center",
+  
     // justifyContent: "center",
     //     // backgroundColor: '#fbe29c',
   },

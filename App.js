@@ -59,7 +59,7 @@ const TabNavigator = () => {
           iconName ='home'
         }else if(route.name === 'Historique'){
           iconName = 'history'
-        }else if(route.name === 'Profile'){
+        }else if(route.name === 'Profil'){
           iconName = 'user'
         }
 
@@ -71,7 +71,7 @@ const TabNavigator = () => {
     })}>
       <Tab.Screen name="Accueil" component={AccueilScreen} />
       <Tab.Screen name="Historique" component={HistoriqueScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Profil" component={ProfileScreen} />
     </Tab.Navigator>
   );
 };

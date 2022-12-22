@@ -9,12 +9,15 @@ import React, { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Header from "./Header";
 import driver from "../reducers/driver";
+import { useSelector } from "react-redux";
 // import AnimatedInput from "react-native-animated-input";
 
 export default function RatingScreen({ navigation }) {
   const [star, setStar] = useState("");
   const [comment, setComment] = useState("");
   const [personalNote, setPersonalNote] = useState(0);
+  const user = useSelector(state => state.user.value)
+  const driver = useSelector(state => state.driver.value)
 
   const handleRating = () => {
     fetch("https://driveher-backend.vercel.app/ratings/addRating", {
@@ -23,6 +26,8 @@ export default function RatingScreen({ navigation }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        token: user.token,
+        id:driver._id,
         starRating: personalNote,
         commentRating: comment,
         textInput: comment, // Add this line to include the text input in the body of the request

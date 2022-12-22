@@ -28,7 +28,7 @@ export default function YourDriverScreen({ navigation }) {
 
   setTimeout(() => {
     navigation.navigate("Rating");
-  }, 5000);
+  }, 7000);
 
   return (
     <View style={styles.container}>
