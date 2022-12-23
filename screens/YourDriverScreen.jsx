@@ -68,7 +68,7 @@ export default function YourDriverScreen({ navigation }) {
           <Avatar.Image
             style={styles.avatar}
             size={80}
-            source={require("../assets/driver.png")}
+            source={require("../assets/Driver.png")}
           />
         </View>
         <View style={styles.descriptionBlock}>

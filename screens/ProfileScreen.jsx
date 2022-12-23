@@ -173,11 +173,11 @@ const styles = StyleSheet.create({
 
   inputContainer: {
     width: "100%",
-    height: "50%",
-    paddingTop:20,
-    paddingBottom:20,
+    // height: "50%",
+    margingTop:20,
+    // paddingBottom:20,
     // flexDirection: "column",
-    borderBottomColor: "#BE355C",
+    // borderBottomColor: "#BE355C",
     // alignItems: 'center',
     // justifyContent: "center",
     //     // backgroundColor: '#fbe29c',
@@ -187,12 +187,12 @@ const styles = StyleSheet.create({
     width: "80%",
     padding: 10,
     // height: "10%",
-    marginTop: 5,
-    borderBottomColor: "#BE355C",
-    borderBottomWidth: 1,
+    marginTop: 15,
+    borderColor: "#BE355C",
+    borderWidth: 1,
     // borderColor: "#BE355C",
     // borderWidth: 1,
-    // borderRadius: 15,
+    borderRadius: 7,
     fontSize: 18,
     overflow: "hidden",
   },
@@ -204,6 +204,8 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     width: "100%",
+    height:'20%',
+    // marginTop:60,
     flexDirection: "row",
     justifyContent: "space-around",
   }
