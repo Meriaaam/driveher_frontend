@@ -4,19 +4,19 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-} from "react-native";
-import Header from "./Header";
-import React from "react";
-import { useState, useEffect } from "react";
-import { useFocusEffect } from "@react-navigation/native";
-import { useSelector } from "react-redux";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+} from 'react-native';
+import Header from './Header';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function HistoriqueScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
   const [ordersData, setOrdersData] = useState([]);
-  const [noHistory, setNoHistory] = useState(false)
+  const [noHistory, setNoHistory] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -27,9 +27,8 @@ export default function HistoriqueScreen({ navigation }) {
         .then((data) => {
           if (data.result) {
             setOrdersData(data.userOrders);
-          }
-          else{
-            setNoHistory(true)
+          } else {
+            setNoHistory(true);
           }
         });
     }, [ordersData])
@@ -50,7 +49,7 @@ export default function HistoriqueScreen({ navigation }) {
               fetch(
                 `https://driveher-backend.vercel.app/orders/deleteOrder/${data._id}`,
                 {
-                  method: "DELETE",
+                  method: 'DELETE',
                 }
               ).then((data) => {
                 if (data.result) {
@@ -71,7 +70,7 @@ export default function HistoriqueScreen({ navigation }) {
         </Text>
         <Text style={styles.text}>
           <Text style={styles.bold}>Le </Text>
-          {day}/{month}/{year} à {hour}h{minutes}{" "}
+          {day}/{month}/{year} à {hour}h{minutes}{' '}
         </Text>
         <Text style={styles.text}>
           <Text style={styles.bold}>Prix:</Text> {data.paymentAmount} €
@@ -85,9 +84,11 @@ export default function HistoriqueScreen({ navigation }) {
       <Header navigation={navigation} />
       <ScrollView style={styles.historyContainer}>
         <Text style={styles.firstText}>Votre historique de courses:</Text>
-        { noHistory && <View style={styles.noHistory}>
-          <Text style={styles.noHistoryText}>Votre historique est vide</Text>
-        </View>}
+        {noHistory && (
+          <View style={styles.noHistory}>
+            <Text style={styles.noHistoryText}>Votre historique est vide</Text>
+          </View>
+        )}
         {historique}
       </ScrollView>
     </View>
@@ -97,21 +98,21 @@ export default function HistoriqueScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
 
   historyContainer: {
-    width: "100%",
+    width: '100%',
     padding: 20,
   },
 
   history: {
-    width: "100%",
+    width: '100%',
     padding: 15,
-    borderBottomColor: "grey",
+    borderBottomColor: 'grey',
     borderBottomWidth: 1,
-    borderTopColor: "grey",
+    borderTopColor: 'grey',
     borderTopWidth: 1,
   },
 
@@ -126,19 +127,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   bold: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   trashIcon: {
-    width: "100%",
-    alignItems: "flex-end",
+    width: '100%',
+    alignItems: 'flex-end',
   },
-  noHistory:{
-    width:'100%',
-    height:'60%',
-    alignItems:'center',
-    marginTop:200
+  noHistory: {
+    width: '100%',
+    height: '60%',
+    alignItems: 'center',
+    marginTop: 200,
   },
-  noHistoryText:{
-    fontSize:20
-  }
+  noHistoryText: {
+    fontSize: 20,
+  },
 });
